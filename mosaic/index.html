@@ -1,217 +1,319 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mosaic - Apply Today</title>
-    <link rel="stylesheet" href="styles-v2.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mosaic | Helping Students Master Math & Confidence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <link href="styles-v2.css" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: #222;
+      background-color: #fff;
+      overflow-x: hidden;
+    }
+
+    header.hero {
+      background: linear-gradient(135deg, #0b90b5 0%, #04293A 100%);
+      color: white;
+      text-align: center;
+      padding: 120px 20px;
+      position: relative;
+    }
+
+    header.hero::before {
+      content: "";
+      background: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+      opacity: 0.15;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 0;
+    }
+
+    header.hero .content {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      max-width: 128px;
+      margin-bottom: 30px;
+    }
+
+    header.hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      max-width: 650px;
+      margin: 0 auto 40px;
+      opacity: 0.9;
+    }
+
+    .cta-btn {
+      background: #ff7b00;
+      color: white;
+      padding: 18px 40px;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .cta-btn:hover {
+      background: #ff9e2b;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    section {
+      padding: 100px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    section h2 {
+      font-size: 2.4rem;
+      text-align: center;
+      margin-bottom: 50px;
+      color: #04293A;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 40px;
+      align-items: center;
+    }
+
+    .two-col img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .two-col p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    .benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 50px;
+    }
+
+    .benefit {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      transition: transform 0.3s ease;
+    }
+
+    .benefit:hover {
+      transform: translateY(-5px);
+    }
+
+    .benefit img {
+      width: 70px;
+      margin-bottom: 20px;
+    }
+
+    .benefit h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: #0b90b5;
+    }
+
+    .story {
+      background: linear-gradient(135deg, #fff7f0, #f9fafc);
+      border-radius: 20px;
+      padding: 60px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      margin-top: 60px;
+    }
+
+    .story h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #04293A;
+    }
+
+    .story p {
+      line-height: 1.7;
+      color: #444;
+      font-size: 1.05rem;
+    }
+
+    .cta-section {
+      text-align: center;
+      padding: 100px 20px;
+      background: linear-gradient(135deg, #0b90b5, #00557b);
+      color: white;
+    }
+
+    .cta-section h2 {
+      color: white;
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+    }
+
+    .cta-section p {
+      font-size: 1.2rem;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+
+    .faq {
+    padding: 80px 0;
+}
+
+.faq h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 60px;
+    color: #2c3e50;
+}
+
+.faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: white;
+    padding: 30px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.faq-item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #2c3e50;
+}
+
+.faq-item p {
+    color: #666;
+    line-height: 1.6;
+}
+
+    footer {
+      background: #04293A;
+      color: white;
+      text-align: center;
+      padding: 40px 0;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      header.hero h1 { font-size: 2.2rem; }
+      .hero-subtitle { font-size: 1rem; }
+      section { padding: 70px 20px; }
+    }
+  </style>
 </head>
 
 <body>
-    <!-- ACT 1: SETUP - Share the Bigger Context -->
-    <header class="hero">
-        <div class="container">
-            <img src="logo.png" alt="Company Logo" class="logo">
-            <h1>The world has changed. Education hasn't.</h1>
-            <p class="hero-subtitle">As technology transforms how we learn and work, our children need more than
-                memorization — they need curiosity, creativity, and confidence to thrive in an uncertain future.</p>
-            <a href="https://form.typeform.com/to/iUcecdab">
-                <button style="margin-top: 25px; color: #009db0;" class="cta-button primary">Apply Now</button>
-            </a>
-        </div>
-    </header>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="content" data-aos="fade-up">
+      <img src="logo.png" alt="Mosaic Logo" class="logo" style="box-shadow: 0 0 10px #333">
+      <h1 style="text-wrap: balance;">Helping Students Unlock Confidence in Math</h1>
+      <p class="hero-subtitle" style="text-wrap: balance;">
+        Think of Mosaic like a GPS for learning&mdash;pinpointing where they are and choosing the best route to get them where they want to go
+      </p>
+      <a target="_blank" href="https://form.typeform.com/to/iUcecdab">
+        <button class="cta-btn">Apply for Assessment</button>
+      </a>
+    </div>
+  </header>
 
-    <!-- The Stakes: Winners and Losers -->
-    <section class="stakes">
-        <div class="container">
-            <h2 style="text-wrap: balance;">The New Reality: Personalized Learning is No Longer Optional</h2>
-            <div class="stakes-grid">
-                <div class="winners">
-                    <h3>🏆 With personalized learning</h3>
-                    <p>Students with personalized learning support are:</p>
-                    <ul>
-                        <li>2x more likely to improve their grades</li>
-                        <li>3x more engaged in learning</li>
-                        <li>Better prepared for college and careers</li>
-                        <li>Developing critical thinking skills for the AI age</li>
-                    </ul>
-                </div>
-                <div class="losers">
-                    <h3>⚠️ With traditional schooling</h3>
-                    <p>Students stuck in traditional systems are:</p>
-                    <ul>
-                        <li>Falling further behind each semester</li>
-                        <li>Losing confidence and motivation</li>
-                        <li>Missing critical foundation skills</li>
-                        <li>Unprepared for an AI-driven future</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="promise-tease">
-                <h3>The Solution: Adaptive Learning That Meets Your Child Where They Are</h3>
-                <p>What if your child was just a handful of changes away from being a self-motivated learner?</p>
-            </div>
-        </div>
-    </section>
+  <!-- PROBLEM & SOLUTION -->
+  <section data-aos="fade-up">
+    <h2>The Problem We’re Solving</h2>
+    <div class="two-col">
+      <img src="student.png" alt="Student struggling with math">
+      <p>
+        Many tutors and tutoring centers often use generic worksheets and one-size-fits-all lessons. They may help your child survive a test, but rarely help them <b>learn how to learn</b>. Mosaic changes that by identifying your child’s unique learning profile, academic gaps, and motivations in order to craft a personalized path forward.
+      </p>
+    </div>
+  </section>
 
-    <!-- ACT 2: CONFRONTATION - Break the Old Way -->
-    <section class="confrontation">
-        <div class="container">
-            <h2>Why Traditional Tutoring and Study Programs Fail Your Child</h2>
-            <div class="problems-grid">
-                <div class="problem-item">
-                    <div class="problem-icon">❌</div>
-                    <h3>One-Size-Fits-All Approach</h3>
-                    <p>Generic curricula ignore your child's unique learning style, pace, and knowledge gaps</p>
-                </div>
-                <div class="problem-item">
-                    <div class="problem-icon">⏰</div>
-                    <h3>Limited Availability</h3>
-                    <p>Tutors are expensive, hard to schedule, and unavailable when your child needs help most</p>
-                </div>
-                <div class="problem-item">
-                    <div class="problem-icon">📊</div>
-                    <h3>No Real Progress Tracking</h3>
-                    <p>You're flying blind with no data on what's actually working or where gaps remain</p>
-                </div>
-                <div class="problem-item">
-                    <div class="problem-icon">💸</div>
-                    <h3>Expensive with No Guarantees</h3>
-                    <p>Spending thousands with no measurable improvement in grades or confidence</p>
-                </div>
-            </div>
-            <div class="old-way-broken">
-                <h3>The Truth: Traditional supplemental education wasn't designed for today's learning challenges</h3>
-                <p>While your child struggles with outdated methods, their peers with personalized learning support are
-                    accelerating ahead. Every day you wait is another day your child falls further behind.</p>
-            </div>
-        </div>
-    </section>
+  <!-- HOW IT WORKS -->
+  <section data-aos="fade-up">
+    <h2>How the Mosaic Assessment Works</h2>
+    <div class="benefits">
+      <div class="benefit">
+        <img src="personality-assessment.svg" alt="Personality">
+        <h3>Personality Assessment</h3>
+        <p>We take an inside-out approach to understanding the way your child learns. Identifying their motivations and natural inclinations is central to our diagnostic.</p>
+      </div>
+      <div class="benefit">
+        <img src="adaptive-proficiency-determination.svg" alt="Adaptive testing">
+        <h3>Adaptive Proficiency Determination</h3>
+        <p>A dynamic testing framework using machine learning for qualitative analysis on the way your child works through problems.</p>
+      </div>
+      <div class="benefit">
+        <img src="introspection-dialogue.svg" alt="Interview">
+        <h3>Introspective Dialogue</h3>
+        <p>During this in-person session, we will do an informal interview to get to know your child from their own point-of-view. This low-stakes conversation helps us understand their perspective, communication skills, emotional intelligence, and engagement.</p>
+      </div>
+    </div>
+  </section>
 
-    <!-- ACT 3: RESOLUTION - Demo Your Better New Way -->
-    <section class="resolution">
-        <div class="container">
-            <h2 style="text-wrap: balance;">Introducing Mosaic: The Missing Piece to Understanding How Your Child Learns
-            </h2>
+  <!-- STORY -->
+  <section data-aos="fade-up">
+    <h2>A Real Story</h2>
+    <div class="story">
+      <h3>“I realized I wasn’t bad at math—I just needed to learn differently.”</h3>
+      <p>When I entered 9th grade, math started to feel very hard. Traditional tutoring helped me get through assignments, but it didn’t help me understand the material. My confidence plummeted, and I started to believe I just wasn’t good at math.</p>
+      <p style="margin-top: 10px;">What I didn’t know then was that I simply needed to learn at a pace and in a way that made sense for me. Because math builds on itself, that gap in confidence and mastery made future classes even harder.</p>
+      <p style="margin-top: 10px;">Over time, I re-discovered my love for math when it was taught to me in a way that resonated, and with the help of mentors and teachers, I rebuilt my confidence in learning. I realized that the problem wasn’t my brain, but I was being taught in a way that didn’t resonate with the unique way I think. I was fortunate enough to have mentors that identified my unique wiring and treated it as an asset to be cherished.</p>
+      <p style="margin-top: 10px;">Now, over a decade later, we are on a mission to help high school students experience that same breakthrough—to feel competent, confident, and capable of seeing their own potential.</p>
+      </p>
+      <p style="margin-top: 10px; color: #777;">~ Kimia Sadeghi, <i>Founder of Mosaic</i></p>
+    </div>
+  </section>
 
-            <div class="how-it-works">
-                <div class="details-grid">
-                    <div class="detail-step">
-                        <div class="step-number">1</div>
-                        <h3>Personality Assessment</h3>
-                        <p>Your child’s unique personality and character is an input in our holistic assessment to
-                            better understand their motivations, frustrations, goals, and needs.</p>
-                    </div>
-                    <div class="detail-step">
-                        <div class="step-number">2</div>
-                        <h3>Adaptive academic testing</h3>
-                        <p>A dynamic, adaptive assessment that is created specifically for your child. It gets easier or
-                            harder depending on how your child answers. This way, every student sees questions matched
-                            to their level — whether they’re working above, at, or below their class level.</p>
-                    </div>
-                    <div class="detail-step">
-                        <div class="step-number">3</div>
-                        <h3>Interview style questions</h3>
-                        <p>During the in-person assessment, we will do an informal interview to get to know your child
-                            beyond the surface. In today’s world, doing well on a test is simply not enough to prepare
-                            for success. By interviewing your child in a low-stakes, casual setting, we will better
-                            understand your child’s perspective, ability to communicate, their emotional intelligence,
-                            and engagement level.</p>
-                    </div>
-                </div>
-            </div>
+  <!-- CTA -->
+  <div class="cta-section" data-aos="fade-up">
+    <h2>Apply for the 360° Mosaic Assessment</h2>
+    <p style="max-width: 1100px; text-wrap: balance; text-align: center; margin: auto; margin-bottom: 30px;">We’re inviting a handful of parents for our early-access pilot program. Join us and experience the difference for just <strong>$50 with a full refund guaranteed for any reason</strong>.</p>
+    <a href="https://form.typeform.com/to/iUcecdab">
+      <button class="cta-btn">Apply Now</button>
+    </a>
+    <p style="margin-top: 40px; margin-bottom: 0; font-size: 1rem;">For questions or inquiries, contact <b>mosaic.learn@gmail.com</b></p>
+  </div>
 
-            <!-- "The Inspiration Behind the Idea" -->
-            <div class="demo-story">
-                <div class="before-after">
-                    <div class="before">
-                        <h3>The Problem First-Hand</h3>
-                        <p>Kimia, a 9th grader, was struggling with geometry. Although she got a B+ in Algebra I, her
-                            grades dropped to a C- in geometry. Traditional tutoring sessions were expensive and didn’t
-                            address her specific learning gaps. Her tutor helped her with her assignments and helped her
-                            get through, but real mastery and confidence did not grow. She thought that she was bad at
-                            math, not realizing that it just wasn’t taught to her at a pace and format that made sense
-                            to her. That reduction of confidence and competence drastically impacted future math courses
-                            because math is a compounding subject that, if lacking mastery on the fundamentals, becomes
-                            exponentially harder.</p>
-                    </div>
-                    <div class="after">
-                        <h3>What Made The Difference</h3>
-                        <p>Fast forward, Kimia’s final transcript varied depending on how something was taught, but she
-                            overcame the lie in her mind that she was not bright. Her mentors, select teachers, and
-                            parents helped her regain the confidence she lost in the classroom. She even got her pilot’s
-                            license and flew a plane by herself at the age of 17, despite getting a C- in Physics,
-                            eventually demonstrating to herself that her grades did not define her capability. But
-                            still, grades do matter when it comes to opening doors of opportunity, and more importantly,
-                            she wanted to actually master academic concepts. That’s why over a decade later, Kimia and
-                            her husband Paul are on a mission to help high school students feel competent and confident
-                            so that they can see their potential for themselves.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ACT 4: CALL-TO-ACTION - Ask for the Switch -->
-    <section class="call-to-action">
-        <div class="container">
-            <div class="offer-badge">Early Access</div>
-            <h2>Apply For The 360° Smart Diagnostic</h2>
-
-            <div class="pilot-details">
-                <h3>Who is this for?</h3>
-                <div class="pilot-benefits">
-                    <div class="pilot-benefit">
-                        <span class="checkmark">✓</span>
-                        <span>High school students</span>
-                    </div>
-                    <div class="pilot-benefit">
-                        <span class="checkmark">✓</span>
-                        <span>“Diamond in the rough” students that are bright and have great potential, but may not be
-                            performing as well as they could in school</span>
-                    </div>
-                    <div class="pilot-benefit">
-                        <span class="checkmark">✓</span>
-                        <span>Looking to improve their confidence and competency in math</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pricing-story">
-                <h3>How much will this cost?</h3>
-                <p>Most tutors cost $60 per hour for just one session. We are offering this insightful, actionable
-                    diagnostic for <b>just $50 with a MONEY BACK GUARANTEE</b>. If you are not satisfied for any reason,
-                    we will return your money back in full!</p>
-            </div>
-
-            <a href="https://form.typeform.com/to/iUcecdab">
-                <button class="cta-button primary">Apply Now</button>
-            </a>
-
-            <div class="next-steps">
-                <h4>What Happens Next:</h4>
-                <ol>
-                    <li>Complete our 5-minute application</li>
-                    <li>We’ll contact you within 24 hours to confirm your participation and schedule a time to meet.
-                    </li>
-                    <li>On the meeting day, we will administer a 360 degree assessment that will take up to 1 hour.</li>
-                    <li>You will receive a summary of the key insights from the assessment, as well as a brief outline
-                        of some recommendations for next steps to help your child tackle their areas of growth.</li>
-                </ol>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ -->
-    <section class="faq">
+  <section class="faq">
         <div class="container">
             <h2>Frequently Asked Questions</h2>
             <div class="faq-list">
                 <div class="faq-item">
-                    <h3>How is it different than other assessments?</h3>
-                    <p>Mosaic’s holistic approach combines science-backed personality assessments, learning style
-                        research, and adaptable academic testing. Most assessments tend to focus on specifically
+                    <h3>How is it different from other assessments?</h3>
+                    <p>Mosaic takes a holistic approach that combines pedagogical insights across personality research, learning styles, and adaptive testing frameworks. Most assessments tend to focus on specifically
                         personality tests or academics, making Mosaic a uniquely insightful assessment. Additionally,
                         many tests have overly complicated reports, thus making it less actionable. If our assessment is
                         not insightful or actionable, we will refund you in full, making it a no-risk commitment!</p>
@@ -236,11 +338,13 @@
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Mosaic. All rights reserved.</p>
-        </div>
-    </footer>
-</body>
+  <footer>
+    <p>© 2025 Mosaic. All rights reserved.</p>
+  </footer>
 
+  <script src="script.js"></script>
+  <script>
+    AOS.init({ duration: 900, once: true });
+  </script>
+</body>
 </html>
