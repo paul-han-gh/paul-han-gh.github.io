@@ -30,6 +30,7 @@
             overflow: hidden; /* Hide scrollbars */
             height: 100vh;
             width: 100vw;
+            cursor: none; /* Default to hidden until moved */
         }
 
         /* Presentation Container */
@@ -308,7 +309,6 @@
         /* Define the shapes using clip-path */
         .seg-obs {
             height: 80px;
-            /* Trapezoid, wide top */
             clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
             font-size: 0.9rem;
             letter-spacing: 1px;
@@ -695,6 +695,24 @@
         } else {
             prevSlide();
         }
+    });
+
+    // --- CURSOR AUTO-HIDE ---
+    let cursorTimer;
+    // Initial State: Cursor visible (until they stop moving)
+    document.body.style.cursor = 'default';
+
+    document.addEventListener('mousemove', () => {
+        // Show cursor immediately on move
+        document.body.style.cursor = 'default';
+        
+        // Reset timer
+        clearTimeout(cursorTimer);
+        
+        // Hide after 2 seconds of inactivity
+        cursorTimer = setTimeout(() => {
+            document.body.style.cursor = 'none';
+        }, 2000); 
     });
 
 </script>
