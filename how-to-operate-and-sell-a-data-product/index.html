@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700;900&family=Open+Sans:wght@400;600&family=Playfair+Display:ital,wght@1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Palette inspired by the "Be." images */
+            --bg-color: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #666666;
+            --accent-mint: #d4f1f4; /* Pastel Mint */
+            --accent-pink: #f4e1d2; /* Pastel Pink/Peach */
+            --accent-dark: #222222;
+            --border-light: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #000;
+            overflow: hidden; /* Hide scrollbars */
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Presentation Container */
+        #presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Individual Slide Styling */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: scale(0.98); /* Slight zoom effect on entry */
+            display: flex;
+            z-index: 0;
+        }
+
+        /* Active Slide State */
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* --- LAYOUTS --- */
+
+        /* Split Layout (Left Text, Right Image) */
+        .layout-split {
+            display: flex;
+            width: 100%;
+        }
+
+        .split-left {
+            width: 40%;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .split-right {
+            width: 60%;
+            background-color: var(--accent-mint);
+            background-image: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Full Content Layout (For Tables/Complex Data) */
+        .layout-full {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding: 60px 100px;
+            justify-content: flex-start;
+        }
+        
+        /* Dark Centered Layout (For Quotes/Impact) */
+        .layout-dark {
+            background-color: var(--accent-dark);
+            color: white;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 100px;
+            text-align: center;
+        }
+
+        /* Mint Centered Layout (For Discussions/Questions) */
+        .layout-mint {
+            background-color: var(--accent-mint);
+            color: var(--text-main);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 100px;
+            text-align: center;
+        }
+
+        /* Decoration: The geometric shapes */
+        .deco-box {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-color: white;
+            bottom: -50px;
+            left: -50px;
+            z-index: 2;
+        }
+        
+        .deco-hex {
+            position: absolute;
+            top: 50%;
+            left: -40px;
+            width: 0; 
+            height: 0; 
+            border-top: 40px solid transparent;
+            border-bottom: 40px solid transparent; 
+            border-right: 60px solid var(--accent-pink); 
+            transform: translateY(-50%);
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 3.5rem;
+            line-height: 1.1;
+            color: var(--text-main);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .brand-mark {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 2rem;
+            margin-bottom: auto; /* Pushes content down in split view */
+            color: var(--text-main);
+        }
+
+        /* For full layout, brand mark is absolute top right */
+        .layout-full .brand-mark, 
+        .layout-mint .brand-mark {
+            position: absolute;
+            top: 60px;
+            right: 60px;
+            margin-bottom: 0;
+        }
+        
+        /* Typography overrides for Dark Layout */
+        .layout-dark h1 {
+            color: white;
+            font-family: 'Playfair Display', serif; /* Elegant serif for quotes */
+            font-style: italic;
+            font-weight: 400;
+            font-size: 3rem;
+            line-height: 1.4;
+            max-width: 900px;
+            text-transform: none; /* Keep natural case for quotes */
+            letter-spacing: 0;
+        }
+        
+        .layout-dark .subtitle {
+            color: var(--accent-mint);
+            margin-top: 30px;
+            font-size: 1rem;
+        }
+        
+        .layout-dark .brand-mark {
+            color: white;
+            position: absolute;
+            top: 60px;
+            left: 60px;
+        }
+        
+        /* Typography overrides for Mint Layout */
+        .layout-mint h1 {
+            color: var(--text-main);
+            font-size: 3rem;
+            max-width: 1000px;
+        }
+        
+        .layout-mint .subtitle {
+            color: var(--text-main);
+            opacity: 0.6;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            max-width: 80%;
+        }
+
+        /* --- TABLE STYLING --- */
+        .table-container {
+            width: 100%;
+            margin-top: 40px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-main);
+            border-bottom: 2px solid var(--text-main);
+            background-color: #fafafa;
+        }
+
+        td {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+
+        td:first-child {
+            font-weight: 700;
+            color: var(--text-main);
+            width: 12%;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        tr:hover td {
+            background-color: rgba(212, 241, 244, 0.2);
+        }
+
+        /* --- DRILL-DOWN GRAPHIC STYLING (Slide 7) --- */
+        .drill-container {
+            display: flex;
+            margin-top: 60px;
+            height: 550px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .drill-graphic-col {
+            width: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 50px;
+        }
+
+        .drill-segment {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            position: relative;
+            margin-bottom: -1px; /* Overlap slightly to avoid gaps */
+            background: linear-gradient(to bottom, var(--accent-pink), var(--accent-mint));
+        }
+
+        /* Define the shapes using clip-path */
+        .seg-obs {
+            height: 80px;
+            /* Trapezoid, wide top */
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: #333;
+        }
+        
+        .seg-1 {
+            height: 75px; width: 85%;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+            background: linear-gradient(to bottom, #f4e1d2, #ebe4d7);
+        }
+        .seg-2 {
+            height: 75px; width: 72%;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+            background: linear-gradient(to bottom, #ebe4d7, #e3e7db);
+        }
+        .seg-3 {
+            height: 75px; width: 61%;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+            background: linear-gradient(to bottom, #e3e7db, #daeadf);
+        }
+        .seg-4 {
+            height: 75px; width: 52%;
+            clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+            background: linear-gradient(to bottom, #daeadf, #d4f1f4);
+        }
+        /* Bottom triangle */
+        .seg-5 {
+            height: 80px; width: 44%;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            background: var(--accent-mint);
+            align-items: flex-start;
+            padding-top: 15px;
+        }
+
+        .drill-text-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0 30px 0;
+        }
+
+        .drill-text-block {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            height: 60px; /* Fixed height for alignment */
+        }
+
+        .drill-text-block strong {
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .method {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-left: 10px;
+            font-style: italic;
+        }
+
+        /* --- CONTROLS --- */
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .nav-arrow {
+            width: 40px;
+            height: 40px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .layout-dark .nav-arrow {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .layout-dark .nav-arrow svg {
+            fill: white;
+        }
+        
+        .nav-arrow:hover {
+            background: rgba(0,0,0,0.1);
+        }
+        
+        .layout-dark .nav-arrow:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .nav-arrow svg {
+            width: 14px;
+            height: 14px;
+            fill: #333;
+        }
+        
+        /* Mobile adjustment */
+        @media (max-width: 768px) {
+            .layout-split { flex-direction: column; }
+            .split-left, .split-right { width: 100%; height: 50%; padding: 40px; }
+            h1 { font-size: 2rem; }
+            .layout-full { padding: 20px; }
+            th, td { font-size: 0.8rem; padding: 10px; }
+            .table-container { overflow-x: scroll; }
+            .layout-dark { padding: 40px; }
+            .layout-dark h1 { font-size: 1.8rem; }
+            .layout-mint { padding: 40px; }
+            
+            /* Drill-down mobile */
+            .drill-container { flex-direction: column; height: auto; }
+            .drill-graphic-col { flex-direction: row; width: 100%; margin-right: 0; margin-bottom: 30px; justify-content: center;}
+            .drill-segment { width: 50px; height: 50px; font-size: 0.9rem; }
+            .seg-obs { width: 70px; font-size: 0.7rem; clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
+            .seg-1, .seg-2, .seg-3, .seg-4 { width: 60px; height: 50px; clip-path: polygon(0 0, 100% 15%, 100% 100%, 0 85%); }
+            .seg-5 { width: 50px; height: 50px; clip-path: polygon(0 15%, 100% 50%, 0 85%); padding-top: 0; align-items: center; }
+            .drill-text-col { padding: 0; }
+            .drill-text-block { height: auto; margin-bottom: 20px; flex-direction: column; align-items: flex-start; }
+            .method { margin-left: 0; margin-top: 5px; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="presentation-container">
+
+    <div class="slide active layout-split" id="slide-1">
+        <div class="split-left">
+            <div class="brand-mark">Be.</div>
+            
+            <div class="subtitle">Presentation</div>
+            <h1>How to Operate and Sell a Data Product</h1>
+            <p>A strategic guide to monetization and management.</p>
+
+        </div>
+        <div class="split-right">
+            <div class="deco-hex"></div>
+            <div class="deco-box" style="top: 10%; right: 10%; left: auto; bottom: auto; background: rgba(255,255,255,0.9);"></div>
+        </div>
+    </div>
+
+    <div class="slide layout-full" id="slide-2">
+        <div class="brand-mark">02.</div>
+        <div class="subtitle">Comparison</div>
+        <h1>Data-as-a-Service vs. Data-as-a-Product</h1>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Data-as-a-Service (DaaS)</th>
+                        <th>Data-as-a-Product (DaaP)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Primary Goal</td>
+                        <td>Data availability and accessibility.</td>
+                        <td>Solving a specific business problem.</td>
+                    </tr>
+                    <tr>
+                        <td>User Focus</td>
+                        <td>Generic (anyone who needs "the data").</td>
+                        <td>Specific (a "Persona" with a "Job to be Done").</td>
+                    </tr>
+                    <tr>
+                        <td>Success Metric</td>
+                        <td>Uptime, latency, and volume.</td>
+                        <td>User adoption, satisfaction, and ROI.</td>
+                    </tr>
+                    <tr>
+                        <td>Ownership</td>
+                        <td>Technical (IT/Data Engineering).</td>
+                        <td>Cross-functional (Product + Engineering).</td>
+                    </tr>
+                    <tr>
+                        <td>Nature of Output</td>
+                        <td>Raw tables, views, or raw API feeds.</td>
+                        <td>Cleaned, modeled, and documented assets.</td>
+                    </tr>
+                    <tr>
+                        <td>Maintenance</td>
+                        <td>Reactive (fix it when it breaks).</td>
+                        <td>Proactive (iterative improvements).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="slide layout-dark" id="slide-3">
+        <div class="brand-mark">03.</div>
+        <div class="subtitle">A Core Principle</div>
+        <h1>“Remember this: Whoever sows sparingly will also reap sparingly, and whoever sows generously will also reap generously.”</h1>
+        <div class="subtitle" style="margin-top: 40px; color: var(--accent-mint);">~ 2 Corinthians 9:6</div>
+        
+        <div style="width: 100px; height: 4px; background: var(--accent-pink); margin-top: 30px;"></div>
+    </div>
+
+    <div class="slide layout-mint" id="slide-4">
+        <div class="brand-mark">04.</div>
+        <div class="subtitle">Discussion Question</div>
+        <h1>In your experiences, how often have you seen data being used in an intentional, non ad-hoc fashion?</h1>
+        
+        <div style="width: 60px; height: 60px; border: 4px solid var(--text-main); margin-top: 50px; transform: rotate(45deg);"></div>
+    </div>
+
+    <div class="slide layout-full" id="slide-5">
+        <div class="brand-mark">05.</div>
+        <div class="subtitle">Model</div>
+        <h1>Gartner Analytic Ascendancy Model</h1>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Stage</th>
+                        <th>Focus</th>
+                        <th>Question Answered</th>
+                        <th>Technical Complexity</th>
+                        <th>Commercial Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Descriptive</td>
+                        <td>Hindsight</td>
+                        <td>What happened?</td>
+                        <td>Low: Batch processing, SQL, basic BI.</td>
+                        <td>Baseline: Essential for operational awareness.</td>
+                    </tr>
+                    <tr>
+                        <td>Diagnostic</td>
+                        <td>Insight</td>
+                        <td>Why did it happen?</td>
+                        <td>Moderate: Drill-downs, correlations, OLAP cubes.</td>
+                        <td>High: Empowers root-cause analysis and strategy.</td>
+                    </tr>
+                    <tr>
+                        <td>Predictive</td>
+                        <td>Foresight</td>
+                        <td>What will happen?</td>
+                        <td>High: ML models, feature engineering, statistical forecasting.</td>
+                        <td>Strategic: Enables proactive planning and risk mitigation.</td>
+                    </tr>
+                    <tr>
+                        <td>Prescriptive</td>
+                        <td>Optimization</td>
+                        <td>How can we make it happen?</td>
+                        <td>Very High: Real-time feedback loops, AI, decision engines.</td>
+                        <td>Transformative: Automates decisions to maximize ROI.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="slide layout-mint" id="slide-6">
+        <div class="brand-mark">06.</div>
+        <div class="subtitle">Discussion Question</div>
+        <h1>What stage would you place Ediphai in?</h1>
+        
+        <div style="width: 60px; height: 60px; border: 4px solid var(--text-main); margin-top: 50px; border-radius: 50%;"></div>
+    </div>
+
+    <div class="slide layout-full" id="slide-7">
+        <div class="brand-mark">07.</div>
+        <div class="subtitle">Diagnostic Analytics</div>
+        <h1>The 5 Whys</h1>
+        
+        <div class="drill-container">
+            <div class="drill-graphic-col">
+                <div class="drill-segment seg-obs">OBSERVATION</div>
+                <div class="drill-segment seg-1">1</div>
+                <div class="drill-segment seg-2">2</div>
+                <div class="drill-segment seg-3">3</div>
+                <div class="drill-segment seg-4">4</div>
+                <div class="drill-segment seg-5">5</div>
+            </div>
+    
+            <div class="drill-text-col">
+                <div class="drill-text-block" style="align-items: flex-start; height: auto; margin-bottom: 20px;">
+                    <div>
+                        <strong style="font-size: 1.2rem;">"Monthly revenue is down by 5%."</strong>
+                    </div>
+                    <span class="method" style="align-self: flex-start; margin-top: 5px;">(Descriptive)</span>
+                </div>
+                
+                <div class="drill-text-block">
+                    <span><strong>Why?</strong> New customer acquisition dropped.</span>
+                    <span class="method">(Drill-down by Segment)</span>
+                </div>
+                <div class="drill-text-block">
+                    <span><strong>Why?</strong> Landing page conversion rates fell from 3% to 1.5%.</span>
+                    <span class="method">(Correlation)</span>
+                </div>
+                <div class="drill-text-block">
+                    <span><strong>Why?</strong> Page load times in Europe increased by 2.5 seconds.</span>
+                    <span class="method">(Granular Monitoring)</span>
+                </div>
+                <div class="drill-text-block">
+                    <span><strong>Why?</strong> A recent CDN configuration error slowed asset delivery.</span>
+                    <span class="method">(Root Cause)</span>
+                </div>
+                <div class="drill-text-block">
+                    <span><strong>Why?</strong> Deployment lacked a regional latency check.</span>
+                    <span class="method">(Process Improvement)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="nav-arrow" onclick="prevSlide()">
+            <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </div>
+        <div class="nav-arrow" onclick="nextSlide()">
+            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- SLIDESHOW ENGINE ---
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(index) {
+        // Wrap around
+        if (index >= totalSlides) index = 0;
+        if (index < 0) index = totalSlides - 1;
+
+        // Remove active class from all
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // Add active class to current
+        slides[index].classList.add('active');
+        currentSlideIndex = index;
+    }
+
+    function nextSlide() {
+        showSlide(currentSlideIndex + 1);
+    }
+
+    function prevSlide() {
+        showSlide(currentSlideIndex - 1);
+    }
+
+    // --- INPUT HANDLERS ---
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+            nextSlide();
+        } else if (e.key === 'ArrowLeft') {
+            prevSlide();
+        }
+    });
+
+    // Click navigation (Left half = prev, Right half = next)
+    document.addEventListener('click', (e) => {
+        // Ignore clicks on buttons/tables to prevent unintended nav when interacting with content
+        if (e.target.closest('.nav-arrow') || e.target.closest('table') || e.target.closest('.drill-container')) return;
+
+        const screenWidth = window.innerWidth;
+        if (e.clientX > screenWidth / 2) {
+            nextSlide();
+        } else {
+            prevSlide();
+        }
+    });
+
+</script>
+
+</body>
+</html>
