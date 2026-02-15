@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growth Plan: Evan Yew</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Merriweather:ital,wght@0,300;0,700;0,900;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #002b5c; /* Scholarly Navy */
+            --accent: #bfa15f; /* Gold/Bronze Accent */
+            --text-dark: #1a1a1a;
+            --text-light: #555555;
+            --bg-light: #f4f5f7;
+            --white: #ffffff;
+            --border-radius: 8px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Merriweather', serif; color: var(--primary); }
+
+        /* --- Header / Hero --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 4rem 1rem;
+            text-align: center;
+            position: relative;
+        }
+
+        header::after {
+            content: ''; display: block; width: 60px; height: 4px;
+            background-color: var(--accent); margin: 1.5rem auto 0;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .subtitle { font-family: 'Inter', sans-serif; font-weight: 300; font-size: 1.1rem; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase; }
+
+        /* --- Navigation (Updated for Mobile Collapse) --- */
+        nav {
+            background: var(--white);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 0.5rem 0;
+        }
+
+        .nav-container {
+            max-width: 1000px; margin: 0 auto; 
+            display: flex; justify-content: center; align-items: center;
+            padding: 0 1rem;
+        }
+
+        .nav-links {
+            display: flex; gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none; color: var(--text-dark); font-weight: 600; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 0.5px; padding: 0.5rem 0; position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a:hover { color: var(--primary); }
+        nav a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--accent); transition: width 0.3s;
+        }
+        nav a:hover::after { width: 100%; }
+
+        /* Hamburger Menu Button (Hidden on Desktop) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            display: block; width: 25px; height: 3px; background-color: var(--primary); border-radius: 3px;
+        }
+
+        /* --- Main Content --- */
+        main { max-width: 1000px; margin: 3rem auto; padding: 0 1.5rem; }
+
+        section {
+            margin-bottom: 4rem; opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out;
+            scroll-margin-top: 80px; /* Offset for sticky header */
+        }
+        section.visible { opacity: 1; transform: translateY(0); }
+
+        .section-title {
+            font-size: 1.8rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem;
+            margin-bottom: 2rem; color: var(--text-dark);
+        }
+
+        /* --- Book Cards --- */
+        .book-card {
+            background: var(--white); border-radius: var(--border-radius); padding: 2.5rem;
+            margin-bottom: 2rem; box-shadow: var(--shadow); border-left: 5px solid var(--primary);
+            display: flex; flex-direction: row; gap: 2rem; align-items: flex-start;
+        }
+
+        .book-cover { flex-shrink: 0; width: 160px; }
+        
+        .book-cover img {
+            width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .book-details { flex-grow: 1; }
+        .book-header { margin-bottom: 1rem; }
+        .book-title { font-size: 1.4rem; font-weight: 900; color: var(--primary); margin-bottom: 0.2rem; }
+        .book-author { font-family: 'Inter', sans-serif; font-style: italic; color: #666; font-size: 1rem; }
+        .book-content { color: var(--text-light); font-size: 1.05rem; }
+        .book-content p { margin-bottom: 1rem; }
+        
+        .highlight-card { border-left-color: var(--accent); background-color: #fffef9; }
+
+        /* --- Video Grid --- */
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
+        .video-card { background: var(--white); border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--shadow); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-info { padding: 1.5rem; }
+        .video-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; font-family: 'Merriweather', serif; }
+        .video-creator { font-size: 0.85rem; text-transform: uppercase; color: #888; font-weight: 700; margin-bottom: 1rem; display: block; }
+        .video-desc { font-size: 0.95rem; color: var(--text-light); }
+
+        /* --- Footer --- */
+        footer { text-align: center; padding: 3rem; color: #888; font-size: 0.9rem; border-top: 1px solid #ddd; margin-top: 4rem; }
+
+        /* --- Responsive Logic --- */
+        @media (max-width: 768px) {
+            .nav-container {
+                justify-content: space-between; /* Push Hamburger to the right */
+                flex-wrap: wrap;
+                padding: 0.5rem 1.5rem;
+            }
+
+            .menu-toggle { display: flex; } /* Show hamburger on mobile */
+
+            .nav-links {
+                display: none; /* Hide links by default on mobile */
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid #eee;
+                margin-top: 0.5rem;
+            }
+
+            .nav-links.active { display: flex; } /* Show when toggled */
+
+            h1 { font-size: 2rem; }
+            .video-grid { grid-template-columns: 1fr; }
+            
+            .book-card { flex-direction: column; align-items: center; text-align: left; padding: 1.5rem; }
+            .book-cover { margin-bottom: 1.5rem; width: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Growth Plan</h1>
+        <div class="subtitle">Prepared for Evan Yew</div>
+    </header>
+
+    <nav>
+        <div class="nav-container">
+            <div style="font-weight: 700; color: var(--primary); font-family: 'Merriweather', serif; font-size: 1.1rem; display: none;" id="mobile-brand">Growth Plan</div>
+            
+            <button class="menu-toggle" aria-label="Toggle Navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-links">
+                <a href="#principled">The Principled Doctor</a>
+                <a href="#life">Skills for Life</a>
+                <a href="#student">Straight A-Student</a>
+                <a href="#videos">Organization & Study</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+
+        <section id="principled">
+            <h2 class="section-title">Recommended reading for an aspiring medical student</h2>
+            <article class="book-card highlight-card">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/61gwba1pQnL._AC_UF1000,1000_QL80_.jpg" alt="When Breath Becomes Air">
+                </div>
+                
+                <div class="book-details">
+                    <div class="book-header">
+                        <div class="book-title">When Breath Becomes Air</div>
+                        <div class="book-author">by Paul Kalanithi</div>
+                    </div>
+                    <div class="book-content">
+                        <p>This one hits differently than any other medicine book because it's written by a neurosurgeon who gets diagnosed with terminal cancer in his 30s, right at the peak of his training. So you're reading someone who spent his whole life preparing to help people face death, and then suddenly has to face it himself.</p>
+                        <p>This book asks the deeper question underneath the job, "Why does it matter to be there with people at the hardest moments of their lives?" This is a book written by a brilliant man who faced death (without the anchor of faith), and it shows both how far human wisdom can take you and where it reaches its limits. For a Christian reader, that's actually meaningful to witness someone straining toward transcendant meaning in dire circumstances.</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="life">
+            <h2 class="section-title">Recommended reading for living a meaningful life</h2>
+            
+            <article class="book-card">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/71Y83R7T4RL._UF1000,1000_QL80_.jpg" alt="Boundaries">
+                </div>
+                
+                <div class="book-details">
+                    <div class="book-header">
+                        <div class="book-title">Boundaries: When to Say Yes, How to Say No</div>
+                        <div class="book-author">by Henry Cloud</div>
+                    </div>
+                    <div class="book-content">
+                        <p>Want a manual for a life you actually want? This book is about one of the most useful skills nobody ever teaches you <i>how to say no without guilt, how to stop taking responsibility for other people's emotions, and how to protect your own time and energy without being selfish about it.</i></p>
+                        <p>It's written from a Christian framework, so the foundation is solid. But the practical stuff applies to every relationship in your life: your parents, your teammates, your friends, eventually your patients.</p>
+                        <p><strong>Here's why it matters right now specifically:</strong> you're at a school that will take everything you give it and ask for more. The people who burn out are the ones who never learned where they end and where everything else begins. The people who last (and actually enjoy the journey) figured out how to draw those lines.</p>
+                    </div>
+                </div>
+            </article>
+
+            <article class="book-card">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/71eCLS1aE6L._AC_UF1000,1000_QL80_.jpg" alt="7 Habits">
+                </div>
+
+                <div class="book-details">
+                    <div class="book-header">
+                        <div class="book-title">7 Habits of Highly Effective People</div>
+                        <div class="book-author">by Stephen Covey</div>
+                    </div>
+                    <div class="book-content">
+                        <p>This is probably the most recommended self-help book of all time, which makes it easy to dismiss. Don't.</p>
+                        <p>The reason it's lasted is because Covey isn't giving you productivity hacks or morning routines, he's making an argument that the way you see yourself and the world determines everything else. Before you can manage your time, you have to know what you actually value. Before you can lead other people, you have to be able to lead yourself.</p>
+                        <p>For someone who wants to be a doctor, who competes in water polo, and who's building something with his content — you're already juggling more than most people your age. This book gives you a framework for making sure all of that is actually pointing somewhere you chose, not just somewhere you ended up.</p>
+                        <p><strong>Tip:</strong> Read Habit 2 ("Begin with the End in Mind") first. If that one lands, the rest will too.</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="student">
+            <h2 class="section-title">Becoming a high-performing student</h2>
+            <article class="book-card">
+                <div class="book-cover">
+                    <img src="https://m.media-amazon.com/images/I/71asonBFVIL._AC_UF1000,1000_QL80_.jpg" alt="Straight A Student">
+                </div>
+
+                <div class="book-details">
+                    <div class="book-header">
+                        <div class="book-title">How To Become A Straight A Student</div>
+                        <div class="book-author">by Cal Newport</div>
+                    </div>
+                    <div class="book-content">
+                        <p>This book has a misleading title. It sounds like someone's going to tell you to study more and sleep less. It's actually the opposite.</p>
+                        <p>Cal Newport interviewed hundreds of top students at elite universities and found that the ones getting the best grades were almost never the ones studying the longest. They had figured out how to work in focused, intense bursts and then actually stop.. leaving time for everything else in their lives. The students killing themselves with hours of unfocused studying were getting worse results.</p>
+                        <p>For someone at Iolani, that's worth thinking about with for a second. The game isn't about more hours. It's about figuring out which hours actually move the needle and making them count.</p>
+                        <p>The practical stuff in here is also genuinely useful: how to take notes so you actually retain things, how to handle assignments without letting them pile up in your head, how to study for tests without cramming the night before. It's not flashy but it works, and it's the kind of thing that frees up time for spearfishing and water polo and everything else that actually makes your life worth living. Read this one with a notebook next to you.</p>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+        <section id="videos">
+            <h2 class="section-title">Organization & Time Management</h2>
+            <div class="video-grid">
+                
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/XqdDMNExvA0" title="How I Organize My Busy Schedule" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">How I Organize My Busy Schedule (Student Edition)</div>
+                        <span class="video-creator">Koi</span>
+                        <div class="video-desc">
+                            Most productivity advice is for adults with assistants. This is for students. The creators are two medical doctors who lived through the grind. Their system: know how long tasks take, and capture everything outside your head.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/unityETmypk" title="How To Learn Anything FASTER" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">How To Learn Anything FASTER</div>
+                        <span class="video-creator">Ali Abdaal</span>
+                        <div class="video-desc">
+                            This explains the "forgetting curve." It’s not a memory problem; it’s a method problem. The fix is Spaced Repetition and Active Recall. The research behind why it works is fascinating for a future doctor.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/Lt54CX9DmS4" title="How to Study for Exams" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">How to Study for Exams</div>
+                        <span class="video-creator">Ali Abdaal</span>
+                        <div class="video-desc">
+                            A full course (originally paid) given for free. It breaks down how to actually understand material instead of just recognizing it. Watch the section on the Feynman Method—explaining things simply to test understanding.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/SjvnHb5WEYA" title="Bible’s Surprising Advice for Beating Procrastination" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                    <div class="video-info">
+                        <div class="video-title">The Bible’s Advice for Beating Procrastination</div>
+                        <span class="video-creator">Redeeming Productivity</span>
+                        <div class="video-desc">
+                            This reframes the question from 'how do I force myself' to 'what does it mean to steward the gifts God gave me.' Understanding the root of avoidance is more useful than just trying harder.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>ENCOURAGEMENT FROM US <br> Strive for excellence, steward your gifts well.</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Fade-in animation logic
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Smooth Scroll & Menu Logic
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            const brandMobile = document.getElementById('mobile-brand');
+
+            // Toggle menu on click
+            if (menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                });
+            }
+
+            // Close menu when a link is clicked
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // Close mobile menu if open
+                    if (navLinks.classList.contains('active')) {
+                        navLinks.classList.remove('active');
+                    }
+
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Show a small "Growth Plan" text on mobile left when menu is there
+            function checkWidth() {
+                if (window.innerWidth <= 768) {
+                    brandMobile.style.display = 'block';
+                } else {
+                    brandMobile.style.display = 'none';
+                    navLinks.classList.remove('active'); // Reset menu on resize
+                }
+            }
+            
+            window.addEventListener('resize', checkWidth);
+            checkWidth(); // Initial check
+        });
+    </script>
+</body>
+</html>
