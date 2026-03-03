@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Power User Presentation</title>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Dimmed colors to prevent projector white burn */
+            --bg-color: #e5e5e5;
+            --text-main: #18181b;
+            --text-muted: #52525b;
+            --accent-bg: #d4d4d8;
+            --card-bg: #f4f4f5;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        #presentation {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Slide Control - Snap, no transitions */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            background: var(--bg-color);
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* Layout Types */
+        .split {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .split > div {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .left-content {
+            padding: 0 10%;
+        }
+
+        .right-content {
+            align-items: center;
+            background: var(--accent-bg);
+        }
+
+        /* Dimmed gradient */
+        .bg-gradient {
+            background: linear-gradient(135deg, #94a3b8 0%, #cbd5e1 100%);
+        }
+
+        /* Scaled up Typography for better visibility */
+        .overline {
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        h1 {
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.03em;
+        }
+
+        h2 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin: 0 0 1rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.75rem;
+            color: var(--text-muted);
+            margin: 0;
+            font-weight: 500;
+            max-width: 90%;
+            line-height: 1.5;
+        }
+
+        .divider {
+            width: 100px;
+            height: 4px;
+            background-color: var(--text-main);
+            margin: 2.5rem 0;
+        }
+
+        /* Shared Card & Diagram Elements */
+        .diagram-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            width: 65%;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .card.dark {
+            background: var(--text-main);
+            color: #f4f4f5;
+        }
+
+        .card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .card p {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .card.dark p {
+            color: #a1a1aa;
+        }
+
+        /* Exercise Specific Elements */
+        .exercise-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            width: 80%;
+        }
+
+        .exercise-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+
+        .exercise-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            background-color: var(--text-main);
+            color: var(--bg-color);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+
+        .exercise-text {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .exercise-text span {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 1.25rem;
+            display: block;
+            margin-top: 0.5rem;
+        }
+
+        .code-snippet {
+            display: inline-block;
+            background-color: var(--text-main);
+            color: var(--bg-color);
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-top: 0.75rem;
+            font-family: monospace;
+            font-size: 1.1rem;
+            border-left: 4px solid #3b82f6;
+            line-height: 1.5;
+        }
+
+        .controls-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 10%;
+            font-size: 1rem;
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="presentation">
+        
+        <div class="slide">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">Training Presentation - 2026</div>
+                    <h1>Becoming an<br>AI Power User</h1>
+                    <p class="subtitle">The Underrated Game-Changing Features</p>
+                    <div class="controls-hint">Use arrow keys or spacebar to navigate</div>
+                </div>
+                <div class="right-content bg-gradient">
+                    <iconify-icon icon="ph:intersect-three-duotone" width="80%" style="color: #475569; opacity: 0.8;"></iconify-icon>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">Feature Overview</div>
+                    <h2>The Hidden<br>Prompt</h2>
+                    <div class="divider"></div>
+                    <p class="subtitle">Under-the-hood in an AI chat, there is secretly a "Role" concept that dictates how the Large Language Model will process and answer your inputs.</p>
+                </div>
+                <div class="right-content">
+                    <div class="diagram-container">
+                        <div class="card">
+                            <iconify-icon icon="ph:user-circle-duotone" width="64" style="color: #18181b;"></iconify-icon>
+                            <div>
+                                <h3>1. User Input</h3>
+                                <p>The prompt typed in the chat interface</p>
+                            </div>
+                        </div>
+                        <iconify-icon icon="ph:arrow-down-bold" width="32" style="color: #71717a;"></iconify-icon>
+                        <div class="card dark">
+                            <iconify-icon icon="ph:mask-visor-duotone" width="64" style="color: #e5e5e5;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #e5e5e5;">2. System Role</h3>
+                                <p>Invisible rules and personas injected first</p>
+                            </div>
+                        </div>
+                        <iconify-icon icon="ph:arrow-down-bold" width="32" style="color: #71717a;"></iconify-icon>
+                        <div class="card">
+                            <iconify-icon icon="ph:robot-duotone" width="64" style="color: #18181b;"></iconify-icon>
+                            <div>
+                                <h3>3. AI Output</h3>
+                                <p>Response uniquely shaped by the hidden role</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">Activity</div>
+                    <h2>Individual<br>Exercise</h2>
+                    <div class="divider"></div>
+                    <p class="subtitle">Put the "Hidden Prompt" concept into practice to see how profoundly roles shape AI output.</p>
+                </div>
+                <div class="right-content" style="background-color: var(--bg-color); border-left: 2px solid var(--accent-bg);">
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-number">1</div>
+                            <div class="exercise-text">
+                                Create 2 different AI chats
+                                <span>Open your preferred AI tool in two separate tabs or windows.</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-number">2</div>
+                            <div class="exercise-text">
+                                Assign distinct roles
+                                <span>In the first message of each chat, give the AI a different "Role" (e.g. "You are an Economics Ph.D student", "You are a 19th century theologian").</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-number">3</div>
+                            <div class="exercise-text">
+                                Ask identical questions
+                                <span>Provide the exact same series of prompts or questions in both of the active chats.</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-number">4</div>
+                            <div class="exercise-text">
+                                Observe the differences
+                                <span>Compare the tone, vocabulary, formatting, and perspective of the resulting answers.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">Platform Features</div>
+                    <h2>Context<br>Injection</h2>
+                    <div class="divider"></div>
+                    <p class="subtitle">Moving beyond a single chat. Here is how the leading platforms allow you to permanently save and apply your "Hidden Prompts."</p>
+                </div>
+                <div class="right-content">
+                    <div class="diagram-container">
+                        <div class="card">
+                            <iconify-icon icon="ph:chat-teardrop-text-duotone" width="64" style="color: #10a37f;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #10a37f;">ChatGPT: Custom GPTs</h3>
+                                <p>Build isolated "GPTs" loaded with specialized instructions, custom knowledge files, and distinct global rules.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <iconify-icon icon="ph:folder-star-duotone" width="64" style="color: #d97757;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #d97757;">Claude: Projects</h3>
+                                <p>Create defined "Projects" to group multiple chats under a unified system prompt and shared document repository.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <iconify-icon icon="ph:sparkle-duotone" width="64" style="color: #8b5cf6;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #8b5cf6;">Gemini: Gems</h3>
+                                <p>Design customized "Gems" that act as targeted experts, tailored entirely by your explicit behavioral directives.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">5-Minute Exercise</div>
+                    <h2>Build Your<br>Own Expert</h2>
+                    <div class="divider"></div>
+                    <p class="subtitle">Let's create a permanent, pre-contextualized assistant to handle a specific, repetitive task: The <b>ELI5 Translator</b>.</p>
+                </div>
+                <div class="right-content" style="background-color: var(--bg-color); border-left: 2px solid var(--accent-bg);">
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-number">1</div>
+                            <div class="exercise-text">
+                                Open Your Platform
+                                <span>Navigate to the creation screen for a ChatGPT Custom GPT, Claude Project, or Gemini Gem.</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-number">2</div>
+                            <div class="exercise-text">
+                                Inject the System Prompt
+                                <span>Paste the following into the instructions/context box:</span>
+                                <div class="code-snippet">"You explain complex concepts to a 5-year-old. Use simple words, fun analogies, and keep it under 3 sentences."</div>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-number">3</div>
+                            <div class="exercise-text">
+                                Test Your Expert
+                                <span>Save it, open a new chat with your expert, and simply type: <b>"Quantum Computing"</b> or <b>"The 2008 Financial Crisis"</b>.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">Interactive Interfaces</div>
+                    <h2>The Canvas<br>Evolution</h2>
+                    <div class="divider"></div>
+                    <p class="subtitle">Platforms are evolving beyond standard chat windows into dedicated, no-code workspaces where AI generates editable, runnable content.</p>
+                </div>
+                <div class="right-content">
+                    <div class="diagram-container">
+                        <div class="card">
+                            <iconify-icon icon="ph:split-square-horizontal-duotone" width="64" style="color: #10a37f;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #10a37f;">ChatGPT Canvas</h3>
+                                <p>A side-by-side editable workspace for writing and coding. It allows for targeted inline edits, version control, and real-time collaboration.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <iconify-icon icon="ph:browser-duotone" width="64" style="color: #d97757;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #d97757;">Claude Artifacts</h3>
+                                <p>A dedicated window that instantly compiles and previews interactive UI components, vector graphics, and single-page apps directly in the browser.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <iconify-icon icon="ph:flask-duotone" width="64" style="color: #8b5cf6;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #8b5cf6;">Gemini Lab Gems</h3>
+                                <p>Targeted, pre-prompted expert environments within Gemini's experimental workspace tailored for seamless, no-code generation and task execution.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">Advanced Exercise</div>
+                    <h2>Build an<br>Interactive UI</h2>
+                    <div class="divider"></div>
+                    <p class="subtitle">Let's expand our expert into a fully functioning application using <b>Claude Artifacts</b> or <b>ChatGPT Canvas</b>.</p>
+                </div>
+                <div class="right-content" style="background-color: var(--bg-color); border-left: 2px solid var(--accent-bg);">
+                    <div class="exercise-list">
+                        <div class="exercise-item">
+                            <div class="exercise-number">1</div>
+                            <div class="exercise-text">
+                                Open the Workspace
+                                <span>Start a new chat and ensure you have Artifacts enabled in Claude or Canvas enabled in ChatGPT.</span>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-number">2</div>
+                            <div class="exercise-text">
+                                Prompt for an Application
+                                <span>Paste the following into your chat prompt:</span>
+                                <div class="code-snippet">"Build a 1-page web app that explains 'The 2008 Financial Crisis'. Include 3 toggle buttons to change the reading complexity: ELI5, Proficient, and World-Class Expert."</div>
+                            </div>
+                        </div>
+                        <div class="exercise-item">
+                            <div class="exercise-number">3</div>
+                            <div class="exercise-text">
+                                Interact with the App
+                                <span>Watch the AI write the code and instantly render the app in the side panel. Click the buttons to see the explanation adapt in real-time.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide active">
+            <div class="split">
+                <div class="left-content">
+                    <div class="overline">Expanding Capabilities</div>
+                    <h2>External<br>Tools & MCP</h2>
+                    <div class="divider"></div>
+                    <p class="subtitle">The Model Context Protocol (MCP) acts as a universal bridge, allowing your AI to securely break out of its chat box and talk directly to your other apps.</p>
+                </div>
+                <div class="right-content">
+                    <div class="diagram-container">
+                        
+                        <div class="card">
+                            <iconify-icon icon="ph:plugs-connected-duotone" width="64" style="color: #3b82f6;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #3b82f6;">The Universal Adapter</h3>
+                                <p>In layman's terms, MCP is a standardized plug. It lets an isolated AI securely connect to your personal files, databases, and enterprise software.</p>
+                            </div>
+                        </div>
+
+                        <div class="card dark">
+                            <iconify-icon icon="ph:hand-grabbing-duotone" width="64" style="color: #e5e5e5;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #e5e5e5;">Giving AI "Hands"</h3>
+                                <p>Instead of just knowing things, the AI can now <i>do</i> things. It can read a live Google Sheet, pull Jira tickets, or search your local hard drive.</p>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <iconify-icon icon="ph:scissors-duotone" width="64" style="color: #ef4444;"></iconify-icon>
+                            <div>
+                                <h3 style="color: #ef4444;">No More Copy-Pasting</h3>
+                                <p>You no longer need to copy data into the chat window. The AI reaches out, grabs the specific context it needs, and does the work for you.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Slide Navigation Logic
+        let currentSlide = 7; // Start on Slide 8 for easy viewing
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= slides.length) index = slides.length - 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            currentSlide = index;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                showSlide(currentSlide - 1);
+            }
+        });
+
+        // Autohide Mouse on Idle
+        let mouseTimeout;
+        document.addEventListener('mousemove', () => {
+            document.body.style.cursor = 'default';
+            clearTimeout(mouseTimeout);
+            mouseTimeout = setTimeout(() => {
+                document.body.style.cursor = 'none';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

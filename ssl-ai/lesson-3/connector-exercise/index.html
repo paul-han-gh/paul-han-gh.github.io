@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Platform Connectors — Practical Exercises</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FAFAF7;
+    --text: #1A1A1A;
+    --text-secondary: #444444;
+    --border: #D0CEC6;
+    --accent-chatgpt: #0D7C66;
+    --accent-chatgpt-bg: #E8F5F0;
+    --accent-claude: #C05621;
+    --accent-claude-bg: #FFF3EB;
+    --accent-gemini: #2B5EA7;
+    --accent-gemini-bg: #EBF1FA;
+    --surface: #FFFFFF;
+    --tag-bg: #EEEDE8;
+    --exercise-bg: #F5F4EF;
+    --step-marker: #6B6B6B;
+    --focus-ring: #2B5EA7;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    font-size: 19px;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Source Sans 3', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ========== SKIP LINK ========== */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    background: var(--text);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+    border-radius: 0 0 6px 6px;
+    font-weight: 600;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+
+  /* ========== HEADER ========== */
+  header {
+    background: var(--text);
+    color: #fff;
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+  }
+  header h1 {
+    font-family: 'Literata', Georgia, 'Times New Roman', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.25;
+    max-width: 800px;
+    margin: 0 auto 0.75rem;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    font-size: 1.15rem;
+    color: #C8C8C8;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ========== NAV ========== */
+  nav {
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0;
+  }
+  .nav-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+  }
+  .nav-inner a {
+    flex: 1;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 1rem 0.75rem;
+    color: var(--text-secondary);
+    border-bottom: 4px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .nav-inner a:hover,
+  .nav-inner a:focus {
+    outline: none;
+  }
+  .nav-inner a[href="#chatgpt"]:hover,
+  .nav-inner a[href="#chatgpt"]:focus {
+    color: var(--accent-chatgpt);
+    border-bottom-color: var(--accent-chatgpt);
+  }
+  .nav-inner a[href="#claude"]:hover,
+  .nav-inner a[href="#claude"]:focus {
+    color: var(--accent-claude);
+    border-bottom-color: var(--accent-claude);
+  }
+  .nav-inner a[href="#gemini"]:hover,
+  .nav-inner a[href="#gemini"]:focus {
+    color: var(--accent-gemini);
+    border-bottom-color: var(--accent-gemini);
+  }
+
+  /* ========== MAIN ========== */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 5rem;
+  }
+
+  .intro-note {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 3rem;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+  .intro-note strong {
+    color: var(--text);
+  }
+
+  /* ========== PLATFORM SECTIONS ========== */
+  .platform-section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 80px;
+  }
+
+  .platform-header {
+    padding: 1.25rem 1.5rem;
+    border-radius: 8px 8px 0 0;
+    border: 2px solid;
+    border-bottom: none;
+  }
+  .platform-header h2 {
+    font-family: 'Literata', Georgia, serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+  .platform-header p {
+    font-size: 1rem;
+    opacity: 0.85;
+  }
+
+  .platform-header--chatgpt {
+    background: var(--accent-chatgpt);
+    border-color: var(--accent-chatgpt);
+    color: #fff;
+  }
+  .platform-header--claude {
+    background: var(--accent-claude);
+    border-color: var(--accent-claude);
+    color: #fff;
+  }
+  .platform-header--gemini {
+    background: var(--accent-gemini);
+    border-color: var(--accent-gemini);
+    color: #fff;
+  }
+
+  .platform-body {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 0 0 8px 8px;
+    padding: 2rem 1.75rem;
+  }
+
+  /* ========== SETUP SECTION ========== */
+  .setup-block {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .setup-block:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .setup-block h3 {
+    font-family: 'Literata', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text);
+  }
+
+  .setup-block h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--text);
+  }
+
+  /* ========== STEP LISTS ========== */
+  .steps {
+    list-style: none;
+    counter-reset: step-counter;
+    padding: 0;
+    margin: 1rem 0;
+  }
+  .steps li {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: 3rem;
+    margin-bottom: 1rem;
+    line-height: 1.65;
+    font-size: 1.05rem;
+  }
+  .steps li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    width: 2rem;
+    height: 2rem;
+    background: var(--tag-bg);
+    color: var(--step-marker);
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .steps li code {
+    background: var(--tag-bg);
+    padding: 0.15em 0.45em;
+    border-radius: 4px;
+    font-size: 0.92em;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--text);
+    word-break: break-word;
+  }
+
+  /* ========== CONNECTOR TAGS ========== */
+  .connector-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--text);
+    padding: 0.3rem 0.75rem;
+    border-radius: 5px;
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  /* ========== EXERCISE CARDS ========== */
+  .exercises-heading {
+    font-family: 'Literata', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 2.5rem 0 1.25rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border);
+  }
+
+  .exercise {
+    background: var(--exercise-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .exercise-label {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    margin-bottom: 0.65rem;
+    color: #fff;
+  }
+  .label--chatgpt { background: var(--accent-chatgpt); }
+  .label--claude  { background: var(--accent-claude);  }
+  .label--gemini  { background: var(--accent-gemini);  }
+
+  .exercise h4 {
+    font-family: 'Literata', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .exercise > p {
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+    font-size: 1.02rem;
+  }
+
+  .exercise .connector-used {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+  .exercise .connector-used span {
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  .exercise .prompt-example {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--step-marker);
+    padding: 0.85rem 1.1rem;
+    border-radius: 0 6px 6px 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0.75rem 0;
+    color: var(--text);
+  }
+  .exercise .prompt-example em {
+    display: block;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--step-marker);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.3rem;
+  }
+
+  .exercise .tip {
+    background: #FEF9E7;
+    border: 1px solid #E6D99E;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 0.97rem;
+    margin-top: 0.75rem;
+    color: #5D4E1A;
+    line-height: 1.6;
+  }
+  .exercise .tip strong {
+    color: #3D3311;
+  }
+
+  /* ========== FOOTER ========== */
+  footer {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+  }
+
+  /* ========== FOCUS STYLES ========== */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* ========== RESPONSIVE ========== */
+  @media (max-width: 600px) {
+    html { font-size: 17px; }
+    header { padding: 2rem 1.25rem 1.75rem; }
+    header h1 { font-size: 1.8rem; }
+    .nav-inner a { font-size: 0.95rem; padding: 0.85rem 0.5rem; }
+    main { padding: 1.5rem 1rem 4rem; }
+    .platform-body { padding: 1.5rem 1.25rem; }
+    .exercise { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header>
+  <h1>AI Platform Connectors: Practical Exercises</h1>
+  <p>Hands-on walkthroughs for connecting your everyday tools to ChatGPT, Claude, and Gemini — then putting those connections to real use.</p>
+</header>
+
+<nav aria-label="Platform navigation">
+  <div class="nav-inner">
+    <a href="#chatgpt">ChatGPT</a>
+    <a href="#claude">Claude</a>
+    <a href="#gemini">Gemini</a>
+  </div>
+</nav>
+
+<main id="main-content">
+
+  <div class="intro-note">
+    <strong>Before you begin:</strong> Each section below starts with setup instructions for connecting tools to that platform, followed by practical exercises you can try immediately. You will need a paid plan on most platforms to access connector features. All exercises use general-purpose apps most people already have accounts for (Google Drive, Outlook, Notion, etc.).
+  </div>
+
+  <!-- ============================================================ -->
+  <!--  CHATGPT                                                      -->
+  <!-- ============================================================ -->
+  <section class="platform-section" id="chatgpt">
+
+    <div class="platform-header platform-header--chatgpt">
+      <h2>ChatGPT</h2>
+      <p>Apps &amp; Connectors by OpenAI</p>
+    </div>
+
+    <div class="platform-body">
+
+      <!-- SETUP -->
+      <div class="setup-block">
+        <h3>How to Set Up a Connector in ChatGPT</h3>
+        <p>ChatGPT calls its integrations <strong>"Apps"</strong> (previously called "Connectors"). They let ChatGPT search, reference, and act on data from third-party services. Available on Plus, Pro, Team, Enterprise, and Edu plans.</p>
+
+        <h4>Available Connectors Include:</h4>
+        <div class="connector-tags">
+          <span class="tag">Google Drive</span>
+          <span class="tag">Gmail</span>
+          <span class="tag">Outlook</span>
+          <span class="tag">SharePoint</span>
+          <span class="tag">Dropbox</span>
+          <span class="tag">OneDrive</span>
+          <span class="tag">Slack</span>
+          <span class="tag">Microsoft Teams</span>
+          <span class="tag">HubSpot</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">Canva</span>
+          <span class="tag">Spotify</span>
+          <span class="tag">Booking.com</span>
+          <span class="tag">Coursera</span>
+        </div>
+
+        <h4>Step-by-Step Setup</h4>
+        <ol class="steps">
+          <li>Open ChatGPT and click your profile icon in the top-right corner, then choose <strong>Settings</strong>.</li>
+          <li>In the left sidebar, click <strong>Apps</strong> (on older interfaces this may still say "Connectors").</li>
+          <li>Browse the App Directory. Find the service you want to connect (for example, Google Drive) and click <strong>Connect</strong>.</li>
+          <li>You will be redirected to that service's sign-in page. Log in with your credentials and <strong>approve the permissions</strong> ChatGPT is requesting. Read these carefully.</li>
+          <li>Once connected, return to ChatGPT. Start a new conversation and use an <strong>@ mention</strong> (type <code>@</code> then the app name) or click the <strong>+</strong> button → <strong>More</strong> to attach the app to your conversation.</li>
+          <li><strong>Test it:</strong> Ask something simple like "Show me my most recent Google Drive files" or "What are my unread emails?" to verify the connection is working.</li>
+        </ol>
+
+        <div class="exercise tip">
+          <strong>Tip:</strong> Some connectors support "Sync" mode, which pre-indexes your data for faster responses. You can enable this in Settings → Apps for supported connectors like Google Drive.
+        </div>
+      </div>
+
+      <!-- EXERCISES -->
+      <h3 class="exercises-heading">Exercises</h3>
+
+      <!-- Exercise 1 -->
+      <div class="exercise">
+        <span class="exercise-label label--chatgpt">Exercise 1</span>
+        <h4>Weekly Email Digest with Gmail</h4>
+        <p>Use the Gmail connector to have ChatGPT summarize your important emails from the past week and draft replies.</p>
+        <p class="connector-used">Connector: <span>Gmail</span></p>
+
+        <ol class="steps">
+          <li>Connect the Gmail app following the setup steps above.</li>
+          <li>Start a new chat and add Gmail using the <strong>+</strong> menu or by typing <code>@Gmail</code>.</li>
+          <li>Use the prompt below to generate a summary.</li>
+          <li>Review the summary. Pick one email and ask ChatGPT to draft a reply.</li>
+          <li>Copy the drafted reply into Gmail, review it, and send.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "@Gmail — Summarize my most important emails from the last 7 days. Group them by topic, highlight any that need a reply, and note any upcoming deadlines mentioned."
+        </div>
+
+        <div class="tip">
+          <strong>Tip:</strong> Include the word "Gmail" in your prompt even if you've already attached the app — this helps ChatGPT reliably trigger the connector.
+        </div>
+      </div>
+
+      <!-- Exercise 2 -->
+      <div class="exercise">
+        <span class="exercise-label label--chatgpt">Exercise 2</span>
+        <h4>Find and Summarize Documents in Google Drive</h4>
+        <p>Connect Google Drive so ChatGPT can search your files and summarize key documents without you leaving the chat.</p>
+        <p class="connector-used">Connector: <span>Google Drive</span></p>
+
+        <ol class="steps">
+          <li>Connect Google Drive through Settings → Apps.</li>
+          <li>Start a new conversation and attach Google Drive.</li>
+          <li>Ask ChatGPT to find a specific document or search by topic.</li>
+          <li>Once it locates the file, ask for a summary or specific details from the document.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "@Google Drive — Find any documents related to 'Q4 budget planning.' Summarize the key points from the most recent one and list any action items."
+        </div>
+      </div>
+
+      <!-- Exercise 3 -->
+      <div class="exercise">
+        <span class="exercise-label label--chatgpt">Exercise 3</span>
+        <h4>Create a Quick Design with Canva</h4>
+        <p>Use the Canva connector to generate social media graphics, presentation slides, or posters directly from a chat prompt.</p>
+        <p class="connector-used">Connector: <span>Canva</span></p>
+
+        <ol class="steps">
+          <li>Connect Canva through the Apps directory in Settings.</li>
+          <li>Start a new conversation with the Canva app attached.</li>
+          <li>Describe what you want to create, including format, colors, and content.</li>
+          <li>Review the generated design. Ask for adjustments or open it directly in Canva to fine-tune.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "@Canva — Create a professional 16:9 presentation slide titled 'Team Goals for Q2.' Use a clean blue and white color scheme. Include placeholders for three goals with icons."
+        </div>
+      </div>
+
+      <!-- Exercise 4 -->
+      <div class="exercise">
+        <span class="exercise-label label--chatgpt">Exercise 4</span>
+        <h4>Sales Pipeline Review with HubSpot</h4>
+        <p>Pull live CRM data into your conversation to review deals, contacts, and pipeline health.</p>
+        <p class="connector-used">Connector: <span>HubSpot</span></p>
+
+        <ol class="steps">
+          <li>Have a HubSpot admin enable the ChatGPT connector in HubSpot (Settings → Connected Apps).</li>
+          <li>In ChatGPT, connect HubSpot from the Apps directory and sign in.</li>
+          <li>Start a conversation and ask about your deals, contacts, or pipeline.</li>
+          <li>Ask follow-up questions to drill into specific deals or get suggestions.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "@HubSpot — Show me all deals in the 'Proposal Sent' stage. For each one, list the contact name, deal value, and how many days it's been in that stage. Flag any that have been stalled for over 30 days."
+        </div>
+
+        <div class="tip">
+          <strong>Tip:</strong> You can also ask ChatGPT to create or update HubSpot records directly from the conversation — for example, "Create a new contact for Jane Smith at Acme Corp."
+        </div>
+      </div>
+
+      <!-- Exercise 5 -->
+      <div class="exercise">
+        <span class="exercise-label label--chatgpt">Exercise 5</span>
+        <h4>Collaborative File Analysis with SharePoint or Dropbox</h4>
+        <p>Search across your team's shared files and get answers from your organization's documents.</p>
+        <p class="connector-used">Connector: <span>SharePoint or Dropbox</span></p>
+
+        <ol class="steps">
+          <li>Connect SharePoint or Dropbox from the Apps directory (Team/Enterprise plans).</li>
+          <li>Start a conversation and attach the connector.</li>
+          <li>Ask ChatGPT to find a specific file, summarize a policy document, or compare two files.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "@SharePoint — Find our company's employee handbook. What is the current policy on remote work? Also, has the vacation policy changed in the last year?"
+        </div>
+      </div>
+
+    </div><!-- /platform-body -->
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!--  CLAUDE                                                       -->
+  <!-- ============================================================ -->
+  <section class="platform-section" id="claude">
+
+    <div class="platform-header platform-header--claude">
+      <h2>Claude</h2>
+      <p>Integrations &amp; Connectors by Anthropic</p>
+    </div>
+
+    <div class="platform-body">
+
+      <!-- SETUP -->
+      <div class="setup-block">
+        <h3>How to Set Up a Connector in Claude</h3>
+        <p>Claude uses <strong>Integrations</strong> (also called "Connectors") built on the open-source <strong>Model Context Protocol (MCP)</strong>. They allow Claude to read from, write to, and take actions in your connected tools. Available on Pro, Max, Team, and Enterprise plans.</p>
+
+        <h4>Available Connectors Include:</h4>
+        <div class="connector-tags">
+          <span class="tag">Google Drive</span>
+          <span class="tag">Gmail</span>
+          <span class="tag">Notion</span>
+          <span class="tag">Slack</span>
+          <span class="tag">Asana</span>
+          <span class="tag">Linear</span>
+          <span class="tag">Jira</span>
+          <span class="tag">Confluence</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Canva</span>
+          <span class="tag">Zapier</span>
+          <span class="tag">Intercom</span>
+          <span class="tag">GitHub</span>
+          <span class="tag">Custom MCP Servers</span>
+        </div>
+
+        <h4>Step-by-Step Setup (Web Connectors)</h4>
+        <ol class="steps">
+          <li>Open <strong>claude.ai</strong> and click on your profile icon, then go to <strong>Settings</strong>.</li>
+          <li>Click <strong>Connectors</strong> in the left sidebar.</li>
+          <li>Browse the <strong>Connectors Directory</strong>. Find the integration you want (for example, Notion) and click <strong>Connect</strong>.</li>
+          <li>You'll be taken through an <strong>OAuth sign-in flow</strong>. Log in to the third-party service and approve the permissions Claude is requesting.</li>
+          <li>Return to Claude. In any conversation, click the <strong>"Search and tools"</strong> menu (or the tools icon) to verify your connector appears and is enabled.</li>
+          <li><strong>Test it:</strong> Start a conversation and ask something like "Show me my recent Notion pages" or "List my Asana tasks."</li>
+        </ol>
+
+        <h4>Adding a Custom Connector (Advanced)</h4>
+        <ol class="steps">
+          <li>In Settings → Connectors, scroll to the bottom and click <strong>"Add custom connector."</strong></li>
+          <li>Enter a name and the <strong>remote MCP server URL</strong> for your tool.</li>
+          <li>Optionally, provide OAuth credentials under <strong>"Advanced settings."</strong></li>
+          <li>Click <strong>Add</strong>. Authenticate when prompted.</li>
+        </ol>
+
+        <div class="exercise tip">
+          <strong>Tip:</strong> Claude connectors are not just read-only. Many support write actions (creating tasks, sending messages, etc.). Always review Claude's tool-approval requests carefully before clicking "Allow."
+        </div>
+      </div>
+
+      <!-- EXERCISES -->
+      <h3 class="exercises-heading">Exercises</h3>
+
+      <!-- Exercise 1 -->
+      <div class="exercise">
+        <span class="exercise-label label--claude">Exercise 1</span>
+        <h4>Build a Project Tracker with Notion</h4>
+        <p>Use the Notion connector to have Claude read your existing workspace, create new project pages, and organize tasks — all from the chat.</p>
+        <p class="connector-used">Connector: <span>Notion</span></p>
+
+        <ol class="steps">
+          <li>Connect Notion through Settings → Connectors and grant access to your workspace.</li>
+          <li>Start a new conversation in Claude.</li>
+          <li>Ask Claude to list your recent Notion pages to confirm the connection works.</li>
+          <li>Use the prompt below to have Claude create a structured project page.</li>
+          <li>Open Notion to verify the page was created, then return to Claude to add tasks.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Using Notion, create a new project page called 'Website Redesign.' Add sections for Goals, Timeline, Task List, and Team Members. Under Task List, add five starter tasks typical for a website redesign project."
+        </div>
+
+        <div class="tip">
+          <strong>Tip:</strong> You can ask Claude to update existing Notion pages too — for example, "Add a new task to my Website Redesign page: 'Finalize homepage wireframes' with a due date of next Friday."
+        </div>
+      </div>
+
+      <!-- Exercise 2 -->
+      <div class="exercise">
+        <span class="exercise-label label--claude">Exercise 2</span>
+        <h4>Morning Briefing from Gmail and Google Drive</h4>
+        <p>Connect both Gmail and Google Drive, then ask Claude to prepare a daily briefing combining your emails and recent documents.</p>
+        <p class="connector-used">Connectors: <span>Gmail + Google Drive</span></p>
+
+        <ol class="steps">
+          <li>Connect both Gmail and Google Drive from the Connectors directory.</li>
+          <li>Start a conversation and verify both connectors are active in the tools menu.</li>
+          <li>Ask Claude for a combined morning briefing.</li>
+          <li>Follow up by asking Claude to draft a reply to a specific email or summarize a specific Drive document.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Good morning. Check my Gmail for anything urgent from the last 24 hours, and look in my Google Drive for any documents that were shared with me this week. Give me a quick briefing: urgent emails first, then new shared documents with one-sentence summaries."
+        </div>
+      </div>
+
+      <!-- Exercise 3 -->
+      <div class="exercise">
+        <span class="exercise-label label--claude">Exercise 3</span>
+        <h4>Sprint Planning with Asana</h4>
+        <p>Use the Asana connector to review current tasks, re-prioritize work, and create new tasks directly from Claude.</p>
+        <p class="connector-used">Connector: <span>Asana</span></p>
+
+        <ol class="steps">
+          <li>Connect Asana through the Connectors directory.</li>
+          <li>Start a conversation and ask Claude to show your current tasks or a specific project.</li>
+          <li>Ask Claude to organize your tasks into a sprint plan.</li>
+          <li>Have Claude create any new tasks that come out of the planning session.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Look at my Asana tasks. Show me everything that's due in the next two weeks. Then help me organize these into a realistic sprint plan — group them by priority (critical, important, nice-to-have) and flag anything that seems overdue."
+        </div>
+      </div>
+
+      <!-- Exercise 4 -->
+      <div class="exercise">
+        <span class="exercise-label label--claude">Exercise 4</span>
+        <h4>Cross-Tool Workflow with Zapier</h4>
+        <p>The Zapier connector lets Claude trigger pre-built automations that span thousands of apps. Use it to chain together actions across your tools.</p>
+        <p class="connector-used">Connector: <span>Zapier</span></p>
+
+        <ol class="steps">
+          <li>Connect Zapier from the Connectors directory and sign in to your Zapier account.</li>
+          <li>In Zapier, make sure you have some "Zaps" (automations) set up — or let Claude help you plan one.</li>
+          <li>In Claude, ask about your available Zapier workflows or trigger specific ones.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Using Zapier, what workflows do I have available? I'd like to trigger the one that adds a new row to my Google Sheet whenever I create a task. Also, can you help me think through a new automation that sends a Slack message when a Google Form response comes in?"
+        </div>
+
+        <div class="tip">
+          <strong>Tip:</strong> Zapier is powerful because it bridges tools that don't have their own direct Claude connector. Think of it as a "universal adapter."
+        </div>
+      </div>
+
+      <!-- Exercise 5 -->
+      <div class="exercise">
+        <span class="exercise-label label--claude">Exercise 5</span>
+        <h4>Drafting and Posting Slack Updates</h4>
+        <p>Use the Slack connector to search conversations, draft messages, and post updates without switching to Slack.</p>
+        <p class="connector-used">Connector: <span>Slack</span></p>
+
+        <ol class="steps">
+          <li>Connect Slack from the Connectors directory and authorize Claude's access to your workspace.</li>
+          <li>Ask Claude to search for recent messages in a specific channel.</li>
+          <li>Have Claude draft a message based on context from the conversation.</li>
+          <li>Review the draft, then ask Claude to post it (you'll need to approve the action).</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Search our #project-updates Slack channel for the last week of messages. Summarize the key updates, then draft a new message for the channel: a short end-of-week summary covering what was accomplished and what's planned for next week."
+        </div>
+      </div>
+
+    </div><!-- /platform-body -->
+  </section>
+
+
+  <!-- ============================================================ -->
+  <!--  GEMINI                                                       -->
+  <!-- ============================================================ -->
+  <section class="platform-section" id="gemini">
+
+    <div class="platform-header platform-header--gemini">
+      <h2>Gemini</h2>
+      <p>Extensions &amp; Workspace Apps by Google</p>
+    </div>
+
+    <div class="platform-body">
+
+      <!-- SETUP -->
+      <div class="setup-block">
+        <h3>How to Set Up Extensions in Gemini</h3>
+        <p>Gemini uses <strong>"App Connections"</strong> (formerly called "Extensions") to integrate with Google's own services and select third-party tools. The strongest connectors are the native Google Workspace integrations: Gmail, Google Drive, Google Docs, Calendar, Keep, and Tasks. Available on Google AI Pro, AI Ultra, and Workspace plans.</p>
+
+        <h4>Available Connectors Include:</h4>
+        <div class="connector-tags">
+          <span class="tag">Gmail</span>
+          <span class="tag">Google Drive</span>
+          <span class="tag">Google Docs</span>
+          <span class="tag">Google Calendar</span>
+          <span class="tag">Google Keep</span>
+          <span class="tag">Google Tasks</span>
+          <span class="tag">Google Maps</span>
+          <span class="tag">YouTube</span>
+          <span class="tag">Google Flights</span>
+          <span class="tag">Google Hotels</span>
+        </div>
+
+        <h4>Step-by-Step Setup</h4>
+        <ol class="steps">
+          <li>Open <strong>gemini.google.com</strong> and sign in with your Google account.</li>
+          <li>Click the <strong>Settings</strong> icon (gear icon) or go to <strong>Settings</strong> from the side menu.</li>
+          <li>Find the <strong>"App Connections"</strong> section (may also appear as "Extensions" on some versions).</li>
+          <li>You will see toggles for each Google service. Turn on the ones you want — for example, switch on <strong>Google Workspace</strong> to enable Gmail, Drive, and Docs access.</li>
+          <li>For Workspace accounts: your organization's admin may need to enable Workspace extensions first. Check with your IT department if the toggles are grayed out.</li>
+          <li><strong>Test it:</strong> Return to a Gemini conversation and ask "What are my unread emails?" or "What's on my calendar today?" to verify the connection.</li>
+        </ol>
+
+        <div class="exercise tip">
+          <strong>Important:</strong> Gemini's extensions work best with Google's own services. Unlike ChatGPT and Claude, Gemini does not yet have a broad directory of third-party connectors in the consumer app — its strength is deep integration with the Google ecosystem.
+        </div>
+      </div>
+
+      <!-- EXERCISES -->
+      <h3 class="exercises-heading">Exercises</h3>
+
+      <!-- Exercise 1 -->
+      <div class="exercise">
+        <span class="exercise-label label--gemini">Exercise 1</span>
+        <h4>Daily Planner with Calendar, Gmail, and Tasks</h4>
+        <p>Combine Gemini's Google Workspace extensions to get a complete picture of your day — meetings, emails, and to-dos in one briefing.</p>
+        <p class="connector-used">Connectors: <span>Google Calendar + Gmail + Google Tasks</span></p>
+
+        <ol class="steps">
+          <li>Ensure Google Workspace extensions are turned on in Settings → App Connections.</li>
+          <li>Start a new Gemini conversation.</li>
+          <li>Ask Gemini for a combined daily overview.</li>
+          <li>Follow up by asking Gemini to create a new calendar event or add a task.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Give me a daily briefing: what meetings do I have today, do I have any urgent emails from the past 12 hours, and what tasks are due this week? Organize it by time of day."
+        </div>
+
+        <div class="tip">
+          <strong>Tip:</strong> All Workspace extensions need to be enabled for multi-app prompts to work. If even one required service is turned off, Gemini may fail to complete any of the actions.
+        </div>
+      </div>
+
+      <!-- Exercise 2 -->
+      <div class="exercise">
+        <span class="exercise-label label--gemini">Exercise 2</span>
+        <h4>Research with Google Drive and Docs</h4>
+        <p>Ask Gemini to search your Drive files and reference specific documents while you work through a problem or plan a project.</p>
+        <p class="connector-used">Connectors: <span>Google Drive + Google Docs</span></p>
+
+        <ol class="steps">
+          <li>Make sure Google Workspace extensions are enabled.</li>
+          <li>Start a conversation and ask Gemini to search for a specific file or topic in your Drive.</li>
+          <li>Ask it to summarize the document or answer specific questions using the document as a source.</li>
+          <li>Request that Gemini help you draft an update or a new document based on what it found.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Search my Google Drive for documents about 'marketing strategy 2025.' Summarize the most recent one in three key points, then help me draft a one-page update memo based on where we are now."
+        </div>
+      </div>
+
+      <!-- Exercise 3 -->
+      <div class="exercise">
+        <span class="exercise-label label--gemini">Exercise 3</span>
+        <h4>Email Triage and Drafting with Gmail</h4>
+        <p>Use Gemini's Gmail extension to sort through your inbox, find specific conversations, and draft responses.</p>
+        <p class="connector-used">Connector: <span>Gmail</span></p>
+
+        <ol class="steps">
+          <li>Enable the Gmail extension in App Connections.</li>
+          <li>Ask Gemini to find specific emails by sender, subject, or date range.</li>
+          <li>Request summaries of email threads.</li>
+          <li>Ask Gemini to draft a reply and copy it into Gmail.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Find all emails from my manager in the past two weeks. What were the key topics discussed? Are there any emails that I haven't responded to yet? Draft a brief reply for each one I missed."
+        </div>
+      </div>
+
+      <!-- Exercise 4 -->
+      <div class="exercise">
+        <span class="exercise-label label--gemini">Exercise 4</span>
+        <h4>Trip Planning with Maps, Flights, and Hotels</h4>
+        <p>Gemini can tap into Google Maps, Google Flights, and Google Hotels to help you research and plan a trip end to end.</p>
+        <p class="connector-used">Connectors: <span>Google Maps + Google Flights + Google Hotels</span></p>
+
+        <ol class="steps">
+          <li>Ensure Maps, Flights, and Hotels extensions are enabled in App Connections.</li>
+          <li>Start a conversation and describe your trip requirements.</li>
+          <li>Ask Gemini to search for flights, suggest hotels, and map out an itinerary.</li>
+          <li>Refine results by adding constraints like budget, dates, or preferences.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "I'm planning a 4-day trip to Portland, Oregon in May. Find me round-trip flights from Los Angeles, suggest 3 hotels near downtown under $200 per night, and create a day-by-day itinerary of things to do including restaurants and outdoor activities."
+        </div>
+
+        <div class="tip">
+          <strong>Tip:</strong> After Gemini suggests flights or hotels, you can open the links directly in Google Flights or Google Hotels to complete your booking.
+        </div>
+      </div>
+
+      <!-- Exercise 5 -->
+      <div class="exercise">
+        <span class="exercise-label label--gemini">Exercise 5</span>
+        <h4>Note-Taking and List Management with Google Keep</h4>
+        <p>Use the Google Keep extension to create, search, and organize notes and lists through conversation.</p>
+        <p class="connector-used">Connector: <span>Google Keep</span></p>
+
+        <ol class="steps">
+          <li>Enable the Keep extension in App Connections.</li>
+          <li>Ask Gemini to show your existing notes or search for specific content.</li>
+          <li>Create new notes, add items to existing lists, or organize notes by topic.</li>
+        </ol>
+
+        <div class="prompt-example">
+          <em>Sample Prompt</em>
+          "Create a new Google Keep note titled 'Home Renovation Checklist.' Add these items: get contractor quotes, choose paint colors, measure kitchen cabinets, research flooring options, and set a budget. Also, show me any existing notes I have about home projects."
+        </div>
+      </div>
+
+    </div><!-- /platform-body -->
+  </section>
+
+</main>
+
+<footer>
+  <p>Last updated: March 2026. Connector availability and interfaces may change as platforms update. Always check each platform's official help center for the most current information.</p>
+</footer>
+
+<script>
+  // Highlight active nav link on scroll
+  (function() {
+    const sections = document.querySelectorAll('.platform-section');
+    const navLinks = document.querySelectorAll('.nav-inner a');
+
+    function highlightNav() {
+      let current = '';
+      sections.forEach(function(section) {
+        const sectionTop = section.offsetTop - 120;
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(function(link) {
+        link.style.borderBottomColor = 'transparent';
+        link.style.color = '';
+
+        if (link.getAttribute('href') === '#' + current) {
+          if (current === 'chatgpt') {
+            link.style.borderBottomColor = '#0D7C66';
+            link.style.color = '#0D7C66';
+          } else if (current === 'claude') {
+            link.style.borderBottomColor = '#C05621';
+            link.style.color = '#C05621';
+          } else if (current === 'gemini') {
+            link.style.borderBottomColor = '#2B5EA7';
+            link.style.color = '#2B5EA7';
+          }
+        }
+      });
+    }
+
+    window.addEventListener('scroll', highlightNav);
+    highlightNav();
+  })();
+</script>
+
+</body>
+</html>

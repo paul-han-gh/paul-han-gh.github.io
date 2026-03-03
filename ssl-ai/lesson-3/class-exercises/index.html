@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Power User: Class Exercises</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;0,7..72,700;1,7..72,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAFAF7;
+            --text: #1A1A1A;
+            --text-secondary: #444444;
+            --border: #D0CEC6;
+            --surface: #FFFFFF;
+            --tag-bg: #EEEDE8;
+            --exercise-bg: #F5F4EF;
+            --step-marker: #6B6B6B;
+            --focus-ring: #2B5EA7;
+            --accent-1: #7B2D8B;
+            --accent-2: #0D7C66;
+            --accent-3: #2B5EA7;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 19px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans 3', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== SKIP LINK ========== */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 1rem;
+            background: var(--text);
+            color: #fff;
+            padding: 0.5rem 1rem;
+            z-index: 1000;
+            border-radius: 0 0 6px 6px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* ========== HEADER ========== */
+        header {
+            background: var(--text);
+            color: #fff;
+            padding: 3rem 2rem 2.5rem;
+            text-align: center;
+        }
+        header h1 {
+            font-family: 'Literata', Georgia, 'Times New Roman', serif;
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 1.25;
+            max-width: 800px;
+            margin: 0 auto 0.75rem;
+            letter-spacing: -0.01em;
+        }
+        header p {
+            font-size: 1.15rem;
+            color: #C8C8C8;
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ========== NAV ========== */
+        nav {
+            background: var(--surface);
+            border-bottom: 2px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+        }
+        .nav-inner a {
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            padding: 1rem 0.75rem;
+            color: var(--text-secondary);
+            border-bottom: 4px solid transparent;
+            transition: color 0.15s, border-color 0.15s;
+        }
+        .nav-inner a:hover,
+        .nav-inner a:focus {
+            outline: none;
+        }
+        .nav-inner a[href="#exercise1"]:hover,
+        .nav-inner a[href="#exercise1"]:focus {
+            color: var(--accent-1);
+            border-bottom-color: var(--accent-1);
+        }
+        .nav-inner a[href="#exercise2"]:hover,
+        .nav-inner a[href="#exercise2"]:focus {
+            color: var(--accent-2);
+            border-bottom-color: var(--accent-2);
+        }
+        .nav-inner a[href="#exercise3"]:hover,
+        .nav-inner a[href="#exercise3"]:focus {
+            color: var(--accent-3);
+            border-bottom-color: var(--accent-3);
+        }
+
+        /* ========== MAIN ========== */
+        main {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 5rem;
+        }
+
+        .intro-note {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 3rem;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .intro-note strong {
+            color: var(--text);
+        }
+
+        /* ========== EXERCISE SECTIONS ========== */
+        .exercise-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 80px;
+        }
+
+        .exercise-header {
+            padding: 1.25rem 1.5rem;
+            border-radius: 8px 8px 0 0;
+            border: 2px solid;
+            border-bottom: none;
+            color: #fff;
+        }
+        .exercise-header h2 {
+            font-family: 'Literata', Georgia, serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        .exercise-header p {
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+
+        .exercise-header--1 {
+            background: var(--accent-1);
+            border-color: var(--accent-1);
+        }
+        .exercise-header--2 {
+            background: var(--accent-2);
+            border-color: var(--accent-2);
+        }
+        .exercise-header--3 {
+            background: var(--accent-3);
+            border-color: var(--accent-3);
+        }
+
+        .exercise-body {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 0 0 8px 8px;
+            padding: 2rem 1.75rem;
+        }
+
+        .exercise-body > p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        /* ========== STEP LISTS ========== */
+        .steps {
+            list-style: none;
+            counter-reset: step-counter;
+            padding: 0;
+            margin: 1rem 0 0;
+        }
+        .steps li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1.75rem;
+            line-height: 1.65;
+            font-size: 1.05rem;
+        }
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0.15rem;
+            width: 2rem;
+            height: 2rem;
+            background: var(--tag-bg);
+            color: var(--step-marker);
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .steps li h3 {
+            font-family: 'Literata', Georgia, serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+
+        .steps li p {
+            color: var(--text-secondary);
+            margin-bottom: 0.4rem;
+        }
+
+        .steps li em {
+            color: var(--text-secondary);
+        }
+
+        /* ========== HIGHLIGHTED KEY TERMS ========== */
+        .key-term {
+            background: #FEF9E7;
+            border: 1px solid #E6D99E;
+            padding: 0.1em 0.4em;
+            border-radius: 4px;
+            font-weight: 700;
+            color: #3D3311;
+        }
+
+        /* ========== PROMPT BOX ========== */
+        .prompt-box {
+            background: var(--exercise-bg);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--step-marker);
+            padding: 0.85rem 1.1rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0.75rem 0;
+            color: var(--text);
+            font-family: 'Source Sans 3', sans-serif;
+        }
+        .prompt-box em {
+            display: block;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--step-marker);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ========== PLATFORM WALKTHROUGH SUB-BLOCKS ========== */
+        .platform-paths {
+            margin-top: 0.75rem;
+        }
+        .platform-path {
+            background: var(--exercise-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.65rem;
+        }
+        .platform-path-label {
+            font-weight: 700;
+            font-size: 0.97rem;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+        }
+        .platform-path p {
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+        .platform-path .nav-trail {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.92rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            display: inline-block;
+            padding: 0.2em 0.6em;
+            border-radius: 4px;
+            color: var(--text);
+            margin-top: 0.2rem;
+            word-break: break-word;
+        }
+
+        /* ========== TIP BOXES ========== */
+        .tip {
+            background: #FEF9E7;
+            border: 1px solid #E6D99E;
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 0.97rem;
+            margin-top: 0.75rem;
+            color: #5D4E1A;
+            line-height: 1.6;
+        }
+        .tip strong {
+            color: #3D3311;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        /* ========== FOCUS STYLES ========== */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid var(--focus-ring);
+            outline-offset: 2px;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 600px) {
+            html { font-size: 17px; }
+            header { padding: 2rem 1.25rem 1.75rem; }
+            header h1 { font-size: 1.8rem; }
+            .nav-inner a { font-size: 0.95rem; padding: 0.85rem 0.5rem; }
+            main { padding: 1.5rem 1rem 4rem; }
+            .exercise-body { padding: 1.5rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<header>
+    <h1>AI Power User: Class Exercises</h1>
+    <p>Three hands-on exercises that build on each other — from shaping AI behavior with roles, to creating custom assistants, to generating full interactive applications.</p>
+</header>
+
+<nav aria-label="Exercise navigation">
+    <div class="nav-inner">
+        <a href="#exercise1">Exercise 1: Hidden Prompt</a>
+        <a href="#exercise2">Exercise 2: Build Your Expert</a>
+        <a href="#exercise3">Exercise 3: Interactive UI</a>
+    </div>
+</nav>
+
+<main id="main-content">
+
+    <div class="intro-note">
+        <strong>How to use this page:</strong> Work through each exercise in order. You'll need access to at least one AI platform (ChatGPT, Claude, or Gemini). Each exercise builds on skills from the one before it.
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  EXERCISE 1                                                   -->
+    <!-- ============================================================ -->
+    <section class="exercise-section" id="exercise1">
+
+        <div class="exercise-header exercise-header--1">
+            <h2>Exercise 1: The Hidden Prompt</h2>
+            <p>See how profoundly roles shape AI output</p>
+        </div>
+
+        <div class="exercise-body">
+            <p>Put the "Hidden Prompt" concept into practice. By giving the AI a specific role upfront, you fundamentally change its tone, vocabulary, and perspective — even when the question stays exactly the same.</p>
+
+            <ol class="steps">
+                <li>
+                    <h3>Create 2 Different AI Chats</h3>
+                    <p>Open your preferred AI tool (ChatGPT, Claude, or Gemini) in two separate tabs or windows.</p>
+                </li>
+                <li>
+                    <h3>Assign Distinct Roles</h3>
+                    <p>In the first message of each chat, give the AI a different "Role".</p>
+
+                    <div class="prompt-box">
+                        <em>Chat 1 — Role Prompt</em>
+                        "You are an Economics Ph.D student."
+                    </div>
+
+                    <div class="prompt-box">
+                        <em>Chat 2 — Role Prompt</em>
+                        "You are a 19th century theologian."
+                    </div>
+                </li>
+                <li>
+                    <h3>Ask Identical Questions</h3>
+                    <p>Provide the exact same series of questions in both of the active chats.</p>
+
+                    <div class="prompt-box">
+                        <em>Sample Question</em>
+                        "Explain how the modern banking system works."
+                    </div>
+                </li>
+                <li>
+                    <h3>Observe the Differences</h3>
+                    <p>Compare the tone, vocabulary, formatting, and perspective of the resulting answers side-by-side. Notice how the same question produces completely different responses depending on the role.</p>
+                </li>
+            </ol>
+
+            <div class="tip">
+                <strong>What to look for:</strong> Pay attention to which answer uses jargon versus plain language, which one cites sources or scripture, and how the "frame" of the role changes what the AI considers important to mention.
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!--  EXERCISE 2                                                   -->
+    <!-- ============================================================ -->
+    <section class="exercise-section" id="exercise2">
+
+        <div class="exercise-header exercise-header--2">
+            <h2>Exercise 2: Build Your Own Expert</h2>
+            <p>Create a reusable, pre-contextualized assistant</p>
+        </div>
+
+        <div class="exercise-body">
+            <p>Create a permanent, pre-contextualized assistant to handle a specific, repetitive task: The <span class="key-term">ELI5 (Explain Like I'm 5) Translator</span>.</p>
+
+            <ol class="steps">
+                <li>
+                    <h3>Open Your Platform</h3>
+                    <p>Navigate to the creation screen for your platform. Follow the instructions for whichever tool you are using:</p>
+
+                    <div class="platform-paths">
+                        <div class="platform-path">
+                            <div class="platform-path-label">ChatGPT — Custom GPT</div>
+                            <p>From the ChatGPT home screen, look at the left sidebar and click <strong>"Explore GPTs"</strong> (or go to chatgpt.com/gpts). In the top-right corner, click the <strong>"Create"</strong> button. This opens the GPT Builder. You'll see a <strong>"Configure"</strong> tab at the top — click it to access the instructions field where you'll paste the system prompt.</p>
+                            <span class="nav-trail">Sidebar → Explore GPTs → Create → Configure tab</span>
+                        </div>
+                        <div class="platform-path">
+                            <div class="platform-path-label">Claude — Project</div>
+                            <p>From the Claude home screen, look at the left sidebar and click <strong>"Projects"</strong>. Then click <strong>"Create Project"</strong>. Give it a name (e.g., "ELI5 Translator"). Once inside the project, you'll see a <strong>"Project instructions"</strong> text area in the project settings panel on the right side — this is where you'll paste the system prompt.</p>
+                            <span class="nav-trail">Sidebar → Projects → Create Project → Project instructions</span>
+                        </div>
+                        <div class="platform-path">
+                            <div class="platform-path-label">Gemini — Gem</div>
+                            <p>From the Gemini home screen, click <strong>"Gem manager"</strong> in the left sidebar (or go to gemini.google.com/gems). Click <strong>"New Gem"</strong> in the top-right. You'll see a text field labeled <strong>"Instructions"</strong> at the top of the page — this is where you'll paste the system prompt. Give your Gem a name before saving.</p>
+                            <span class="nav-trail">Sidebar → Gem manager → New Gem → Instructions field</span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <h3>Inject the System Prompt</h3>
+                    <p>In the instructions field you just located, paste the following exact text:</p>
+
+                    <div class="prompt-box">
+                        <em>System Prompt</em>
+                        "You explain complex concepts to a 5-year-old. Use simple words, fun analogies, and keep it under 3 sentences."
+                    </div>
+                </li>
+                <li>
+                    <h3>Test Your Expert</h3>
+                    <p>Save it, open a new chat with your newly created expert, and type a complex topic to test it.</p>
+
+                    <div class="prompt-box">
+                        <em>Topics to Try</em>
+                        "Quantum Computing"&emsp;•&emsp;"The 2008 Financial Crisis"&emsp;•&emsp;"How DNA Works"
+                    </div>
+                </li>
+            </ol>
+
+            <div class="tip">
+                <strong>Going further:</strong> Try changing the system prompt to a different persona — a sports commentator, a pirate, a patient kindergarten teacher — and notice how the same topic gets explained in wildly different ways.
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================ -->
+    <!--  EXERCISE 3                                                   -->
+    <!-- ============================================================ -->
+    <section class="exercise-section" id="exercise3">
+
+        <div class="exercise-header exercise-header--3">
+            <h2>Exercise 3: Build an Interactive UI</h2>
+            <p>Turn an AI prompt into a working web application</p>
+        </div>
+
+        <div class="exercise-body">
+            <p>Expand our expert into a fully functioning application using <span class="key-term">Claude Artifacts</span>, <span class="key-term">ChatGPT Canvas</span>, or <span class="key-term">Gemini Gem Labs</span>. You'll ask the AI to write code and render it as a live, interactive app — all within the chat window.</p>
+
+            <ol class="steps">
+                <li>
+                    <h3>Open the Workspace</h3>
+                    <p>Each platform has its own name for the feature that renders live code. Follow the instructions for your tool:</p>
+
+                    <div class="platform-paths">
+                        <div class="platform-path">
+                            <div class="platform-path-label">ChatGPT — Canvas</div>
+                            <p>Start a new chat in ChatGPT. Canvas activates automatically when you ask ChatGPT to write code or long-form content. You can also type <strong>"use canvas"</strong> in your prompt to explicitly open it. The Canvas panel will appear on the right side of the screen, showing live-rendered output alongside the conversation.</p>
+                            <span class="nav-trail">New chat → Ask to write code (or type "use canvas")</span>
+                        </div>
+                        <div class="platform-path">
+                            <div class="platform-path-label">Claude — Artifacts</div>
+                            <p>Start a new chat on <strong>claude.ai</strong>. Artifacts are enabled by default — when you ask Claude to build something like a web app, it will automatically render the result in a panel on the right side of the screen. If you don't see it, go to <strong>Settings → Feature Preview</strong> and make sure <strong>"Artifacts"</strong> is toggled on.</p>
+                            <span class="nav-trail">New chat → Ask to build an app → Artifact panel appears on right</span>
+                        </div>
+                        <div class="platform-path">
+                            <div class="platform-path-label">Gemini — Gem Labs</div>
+                            <p>From the Gemini home screen, open the left sidebar and click <strong>"Gem Labs"</strong>. This is Gemini's space for building and running interactive code-based apps. Click <strong>"New"</strong> to create a new project, then paste your prompt in the chat field. The rendered app will appear in a preview panel alongside the conversation.</p>
+                            <span class="nav-trail">Sidebar → Gem Labs → New → Paste prompt</span>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <h3>Prompt for an Application</h3>
+                    <p>Paste the following exact text into your chat prompt:</p>
+
+                    <div class="prompt-box">
+                        <em>Application Prompt</em>
+                        "Build a 1-page web app that explains 'The 2008 Financial Crisis'. Include 3 toggle buttons to change the reading complexity: ELI5, Proficient, and World-Class Expert."
+                    </div>
+                </li>
+                <li>
+                    <h3>Interact with the App</h3>
+                    <p>Watch the AI write the code and instantly render the app in the side panel (Canvas in ChatGPT, Artifacts in Claude, or the preview pane in Gem Labs). Click the different buttons to see the explanation adapt in real-time.</p>
+                </li>
+            </ol>
+
+            <div class="tip">
+                <strong>Try this next:</strong> Ask the AI to add features to the app you just built — for example, "Add a dark mode toggle" or "Add a fourth complexity level for a curious 10-year-old." This shows how AI-generated apps can be iterated on conversationally.
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>AI Power User — Class Exercises. Work through these at your own pace. Each exercise is designed to build your intuition for how AI tools respond to structure and context.</p>
+</footer>
+
+<script>
+    // Highlight active nav link on scroll
+    (function() {
+        const sections = document.querySelectorAll('.exercise-section');
+        const navLinks = document.querySelectorAll('.nav-inner a');
+        const accentColors = {
+            'exercise1': '#7B2D8B',
+            'exercise2': '#0D7C66',
+            'exercise3': '#2B5EA7'
+        };
+
+        function highlightNav() {
+            let current = '';
+            sections.forEach(function(section) {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(function(link) {
+                link.style.borderBottomColor = 'transparent';
+                link.style.color = '';
+                const href = link.getAttribute('href').replace('#', '');
+                if (href === current && accentColors[current]) {
+                    link.style.borderBottomColor = accentColors[current];
+                    link.style.color = accentColors[current];
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightNav);
+        highlightNav();
+    })();
+</script>
+
+</body>
+</html>
