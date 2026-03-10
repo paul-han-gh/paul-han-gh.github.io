@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setting Up Claude Cowork — A Step-by-Step Guide</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Iconify -->
+  <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --color-bg: #FDFAF6;
+      --color-surface: #FFFFFF;
+      --color-ink: #1A1714;
+      --color-ink-muted: #6B6560;
+      --color-ink-faint: #A09A94;
+      --color-accent: #D4552A;
+      --color-accent-light: #FFF0EB;
+      --color-teal: #0A7B6E;
+      --color-teal-light: #E8F6F4;
+      --color-border: #E8E3DD;
+      --color-highlight: #FEF3CD;
+      --font-display: 'DM Serif Display', serif;
+      --font-body: 'Instrument Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --max-width: 780px;
+      --gutter: 24px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-bg);
+      color: var(--color-ink);
+      line-height: 1.7;
+      font-size: 17px;
+    }
+
+    /* ── Hero ─────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 100px var(--gutter) 72px;
+      background: linear-gradient(168deg, #1A1714 0%, #2C2520 55%, #3A2218 100%);
+      color: #fff;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(212, 85, 42, .25), transparent),
+        radial-gradient(ellipse 50% 60% at 15% 85%, rgba(10, 123, 110, .2), transparent);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 32px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-badge .iconify {
+      color: var(--color-accent);
+      font-size: 16px;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 6vw, 3.8rem);
+      line-height: 1.12;
+      font-weight: 400;
+      max-width: 640px;
+      margin-bottom: 24px;
+      letter-spacing: -.01em;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      line-height: 1.65;
+      color: rgba(255,255,255,.65);
+      max-width: 540px;
+      margin-bottom: 40px;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 14px;
+      color: rgba(255,255,255,.45);
+    }
+
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-image {
+      margin: 48px auto 0;
+      max-width: 900px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 40px 80px rgba(0,0,0,.4);
+    }
+
+    .hero-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ── Body Layout ─────────────────────────────────────── */
+    .page-body {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    /* ── Table of Contents ────────────────────────────────── */
+    .toc {
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 32px 36px;
+      margin: 64px 0 56px;
+      background: var(--color-surface);
+    }
+
+    .toc-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--color-ink-faint);
+      margin-bottom: 18px;
+    }
+
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+    }
+
+    .toc li {
+      counter-increment: toc;
+      margin-bottom: 10px;
+    }
+
+    .toc li:last-child { margin-bottom: 0; }
+
+    .toc a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--color-ink);
+      font-weight: 500;
+      font-size: 15px;
+      transition: color .2s;
+    }
+
+    .toc a:hover {
+      color: var(--color-accent);
+    }
+
+    .toc a::before {
+      content: counter(toc, decimal-leading-zero);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-ink-faint);
+      width: 24px;
+      flex-shrink: 0;
+    }
+
+    /* ── Section Styles ───────────────────────────────────── */
+    .section {
+      padding: 56px 0;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .section:first-of-type {
+      border-top: none;
+    }
+
+    .step-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-accent);
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      line-height: 1.2;
+      font-weight: 400;
+      margin-bottom: 20px;
+      letter-spacing: -.01em;
+    }
+
+    .section p {
+      color: var(--color-ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-image {
+      margin: 32px 0;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 4px 24px rgba(0,0,0,.06);
+    }
+
+    .section-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ── Instruction Cards ────────────────────────────────── */
+    .instruction-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .instruction-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px 22px;
+      border-radius: 10px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .instruction-item:hover {
+      border-color: #D0C9C2;
+      box-shadow: 0 2px 12px rgba(0,0,0,.04);
+    }
+
+    .instruction-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .instruction-content h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--color-ink);
+    }
+
+    .instruction-content p {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: var(--color-ink-muted);
+      margin-bottom: 0;
+    }
+
+    /* ── Callout Boxes ────────────────────────────────────── */
+    .callout {
+      display: flex;
+      gap: 14px;
+      padding: 20px 22px;
+      border-radius: 10px;
+      margin: 28px 0;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .callout .iconify {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .callout p { margin-bottom: 0; }
+
+    .callout-info {
+      background: var(--color-teal-light);
+      border: 1px solid #C2E4E0;
+      color: #064E42;
+    }
+
+    .callout-info .iconify { color: var(--color-teal); }
+
+    .callout-warning {
+      background: var(--color-highlight);
+      border: 1px solid #EBD98B;
+      color: #6B5B00;
+    }
+
+    .callout-warning .iconify { color: #B09100; }
+
+    .callout-tip {
+      background: var(--color-accent-light);
+      border: 1px solid #F3C9BA;
+      color: #7A2E14;
+    }
+
+    .callout-tip .iconify { color: var(--color-accent); }
+
+    /* ── Stats Row ────────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 28px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+
+    .stat-card .stat-number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--color-accent);
+      margin-bottom: 6px;
+    }
+
+    .stat-card .stat-desc {
+      font-size: 13.5px;
+      color: var(--color-ink-muted);
+      line-height: 1.4;
+    }
+
+    /* ── Requirements Grid ────────────────────────────────── */
+    .req-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .req-card {
+      padding: 22px;
+      border-radius: 10px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+    }
+
+    .req-card .iconify {
+      font-size: 28px;
+      color: var(--color-teal);
+      margin-bottom: 12px;
+    }
+
+    .req-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .req-card p {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--color-ink-muted);
+      margin-bottom: 0;
+    }
+
+    /* ── Code Block ───────────────────────────────────────── */
+    .code-block {
+      background: #1A1714;
+      border-radius: 10px;
+      padding: 22px 24px;
+      margin: 24px 0;
+      overflow-x: auto;
+    }
+
+    .code-block code {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      color: #E8E3DD;
+      line-height: 1.7;
+    }
+
+    .code-block .comment { color: #6B6560; }
+    .code-block .keyword { color: #D4552A; }
+    .code-block .string { color: #0A7B6E; }
+
+    /* ── Use Case Grid ────────────────────────────────────── */
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .use-case {
+      padding: 24px;
+      border-radius: 10px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .use-case:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.06);
+    }
+
+    .use-case .iconify {
+      font-size: 26px;
+      color: var(--color-accent);
+      margin-bottom: 12px;
+    }
+
+    .use-case h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .use-case p {
+      font-size: 14px;
+      color: var(--color-ink-muted);
+      margin-bottom: 0;
+      line-height: 1.55;
+    }
+
+    /* ── CTA Footer ───────────────────────────────────────── */
+    .cta-footer {
+      text-align: center;
+      padding: 72px var(--gutter);
+      margin-top: 40px;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .cta-footer h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      margin-bottom: 16px;
+    }
+
+    .cta-footer p {
+      color: var(--color-ink-muted);
+      max-width: 440px;
+      margin: 0 auto 32px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border-radius: 8px;
+      background: var(--color-ink);
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background .2s, transform .15s;
+    }
+
+    .btn-primary:hover {
+      background: #333;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary .iconify {
+      font-size: 18px;
+    }
+
+    /* ── Page Footer ──────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 32px var(--gutter);
+      font-size: 13px;
+      color: var(--color-ink-faint);
+      border-top: 1px solid var(--color-border);
+    }
+
+    footer a {
+      color: var(--color-ink-muted);
+      text-decoration: none;
+    }
+
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Animations ───────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+
+    .animate-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero-badge   { animation: fadeUp .6s ease .1s both; }
+    .hero h1      { animation: fadeUp .6s ease .2s both; }
+    .hero-subtitle { animation: fadeUp .6s ease .3s both; }
+    .hero-meta    { animation: fadeUp .6s ease .4s both; }
+    .hero-image   { animation: fadeUp .8s ease .5s both; }
+
+    /* ── Responsive ───────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero { padding: 72px var(--gutter) 56px; }
+      .toc { padding: 24px; }
+      .stats-row { grid-template-columns: 1fr; }
+      .req-grid { grid-template-columns: 1fr; }
+      .use-case-grid { grid-template-columns: 1fr; }
+      .instruction-item { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HERO ═══ -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="iconify" data-icon="ph:sparkle-fill"></span>
+        Setup Guide
+      </div>
+      <h1>Get started with<br />Claude Cowork</h1>
+      <p class="hero-subtitle">
+        From download to your first delegated task — everything you need to set up
+        Cowork and start handing off real work to Claude on your desktop.
+      </p>
+      <div class="hero-meta">
+        <span>
+          <span class="iconify" data-icon="ph:clock"></span>
+          12 min read
+        </span>
+        <span>
+          <span class="iconify" data-icon="ph:calendar-blank"></span>
+          Updated March 2026
+        </span>
+        <span>
+          <span class="iconify" data-icon="ph:desktop"></span>
+          macOS &amp; Windows
+        </span>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img
+        src="https://mcp-tools-z-image-turbo.hf.space/--replicas/w2rzk/gradio_api/file=/tmp/gradio/f0d3edd3d214d52dd3a0261a0807c957ff4a584955f31c200069084f813a2d79/image.webp"
+        alt="Claude Cowork workspace concept"
+      />
+    </div>
+  </header>
+
+  <!-- ═══ BODY ═══ -->
+  <main class="page-body">
+
+    <!-- Table of Contents -->
+    <nav class="toc animate-in">
+      <div class="toc-title">In this guide</div>
+      <ol>
+        <li><a href="#what-is-cowork">What is Cowork and why does it matter?</a></li>
+        <li><a href="#requirements">Check your requirements</a></li>
+        <li><a href="#download">Download Claude Desktop</a></li>
+        <li><a href="#open-cowork">Open Cowork &amp; select a folder</a></li>
+        <li><a href="#first-task">Run your first task</a></li>
+        <li><a href="#instructions">Set up global &amp; folder instructions</a></li>
+        <li><a href="#connectors">Connect your tools</a></li>
+        <li><a href="#schedule">Schedule recurring tasks</a></li>
+        <li><a href="#use-cases">What you can build from here</a></li>
+      </ol>
+    </nav>
+
+
+    <!-- ── Section 1: What Is Cowork ── -->
+    <section class="section animate-in" id="what-is-cowork">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:info"></span>
+        Background
+      </div>
+      <h2>What is Cowork and why does it matter?</h2>
+      <p>
+        Cowork is a research preview built into the Claude Desktop app that brings the
+        same agentic capabilities behind Claude Code to knowledge workers — no terminal
+        required. Instead of going back and forth in a chat window, you describe an
+        outcome, step away, and come back to finished work: formatted documents,
+        organized files, synthesized research, and more.
+      </p>
+      <p>
+        Think of the difference this way: <strong>Chat is asking a colleague a question.
+        Cowork is delegating a project and checking back when it's done.</strong>
+        Claude analyzes your request, breaks it into sub-tasks, coordinates parallel
+        workstreams, and delivers outputs directly to your file system.
+      </p>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number">10 days</div>
+          <div class="stat-desc">From concept to launch — built with Claude Code itself</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Jan '26</div>
+          <div class="stat-desc">Released as a research preview for paid plans</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">50+</div>
+          <div class="stat-desc">Connectors for Slack, Google&nbsp;Drive, Notion &amp; more</div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ── Section 2: Requirements ── -->
+    <section class="section animate-in" id="requirements">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:list-checks"></span>
+        Step 01
+      </div>
+      <h2>Check your requirements</h2>
+      <p>Before you begin, make sure you have everything you need.</p>
+
+      <div class="req-grid">
+        <div class="req-card">
+          <span class="iconify" data-icon="ph:desktop-tower"></span>
+          <h4>Claude Desktop App</h4>
+          <p>Cowork is built into the desktop app for macOS and Windows (x64). Not available on web or mobile.</p>
+        </div>
+        <div class="req-card">
+          <span class="iconify" data-icon="ph:credit-card"></span>
+          <h4>Paid Claude Plan</h4>
+          <p>Available on Pro ($20/mo), Max ($100–200/mo), Team, and Enterprise subscriptions.</p>
+        </div>
+        <div class="req-card">
+          <span class="iconify" data-icon="ph:wifi-high"></span>
+          <h4>Internet Connection</h4>
+          <p>An active connection is required throughout every Cowork session.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-warning">
+        <span class="iconify" data-icon="ph:warning-fill"></span>
+        <p><strong>Windows users:</strong> Cowork requires the latest version of Claude for Windows. Windows&nbsp;arm64 is not currently supported.</p>
+      </div>
+    </section>
+
+
+    <!-- ── Section 3: Download ── -->
+    <section class="section animate-in" id="download">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:download-simple"></span>
+        Step 02
+      </div>
+      <h2>Download Claude Desktop</h2>
+      <p>
+        If you don't already have the Claude Desktop app, head to
+        <strong>claude.com/download</strong> and grab the installer for your operating
+        system. On macOS you'll get a universal <code>.dmg</code>; on Windows, a
+        standard x64 installer.
+      </p>
+
+      <div class="section-image">
+        <img
+          src="https://mcp-tools-z-image-turbo.hf.space/--replicas/w2rzk/gradio_api/file=/tmp/gradio/81aa5bde7effc5df6111d9b8ebf51166d5910d0f24cf99cb913fb71299d91848/image.webp"
+          alt="Downloading Claude Desktop"
+        />
+      </div>
+
+      <div class="instruction-list">
+        <div class="instruction-item">
+          <div class="instruction-number">1</div>
+          <div class="instruction-content">
+            <h4>Visit claude.com/download</h4>
+            <p>The site will auto-detect your OS. Click the primary download button.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-number">2</div>
+          <div class="instruction-content">
+            <h4>Install the app</h4>
+            <p>On macOS, drag the icon into Applications. On Windows, run the installer and follow the prompts.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-number">3</div>
+          <div class="instruction-content">
+            <h4>Sign in to your account</h4>
+            <p>Open Claude Desktop and log in with the account tied to your paid subscription.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="iconify" data-icon="ph:lightbulb-fill"></span>
+        <p><strong>Already have Claude Desktop?</strong> Make sure you're on the latest version — Cowork may not appear if your app is outdated. Check for updates in the app menu.</p>
+      </div>
+    </section>
+
+
+    <!-- ── Section 4: Open Cowork ── -->
+    <section class="section animate-in" id="open-cowork">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:cursor-click"></span>
+        Step 03
+      </div>
+      <h2>Open Cowork &amp; select a working folder</h2>
+      <p>
+        Once you're in Claude Desktop, you'll see a mode selector at the top of the
+        window with tabs for <strong>Chat</strong>, <strong>Cowork</strong>, and
+        <strong>Code</strong>. Click <strong>Cowork</strong> to switch into task mode.
+      </p>
+      <p>
+        Cowork will then ask you to select a local folder. This is the workspace Claude
+        reads from and writes to — it can only access files in folders you explicitly
+        grant. Start with a dedicated project folder to keep things clean while you learn.
+      </p>
+
+      <div class="section-image">
+        <img
+          src="https://mcp-tools-z-image-turbo.hf.space/--replicas/w2rzk/gradio_api/file=/tmp/gradio/056e4e6fcae314e4c416c8a5e1fe2f72fe38bcaf5c954164d2e08128c7bffe27/image.webp"
+          alt="Organizing your working folder"
+        />
+      </div>
+
+      <div class="instruction-list">
+        <div class="instruction-item">
+          <div class="instruction-number">1</div>
+          <div class="instruction-content">
+            <h4>Click the "Cowork" tab</h4>
+            <p>The interface switches from Chat to the Tasks view.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-number">2</div>
+          <div class="instruction-content">
+            <h4>Select a folder</h4>
+            <p>Choose or create a folder like <code>~/cowork-workspace</code>. Claude will read and write files here.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-number">3</div>
+          <div class="instruction-content">
+            <h4>Choose your model</h4>
+            <p>For best results, select <strong>Opus 4.6</strong> with <strong>Extended Thinking</strong> enabled.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="iconify" data-icon="ph:shield-check-fill"></span>
+        <p><strong>Security note:</strong> Cowork runs inside an isolated virtual machine on your computer. Claude can access the files you share, but requires explicit permission before permanently deleting anything.</p>
+      </div>
+    </section>
+
+
+    <!-- ── Section 5: First Task ── -->
+    <section class="section animate-in" id="first-task">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:rocket-launch"></span>
+        Step 04
+      </div>
+      <h2>Run your first task</h2>
+      <p>
+        You're ready to delegate. Type a task description in the input field and hit
+        Enter. Claude will analyze your request, propose a plan, and ask for your
+        approval before executing. Start with something straightforward to build
+        confidence.
+      </p>
+
+      <div class="section-image">
+        <img
+          src="https://mcp-tools-z-image-turbo.hf.space/--replicas/w2rzk/gradio_api/file=/tmp/gradio/db6426c96f5ec1aaf1cc18d28b929e85c0ce8636d77c2de22c671bd009ca8924/image.webp"
+          alt="AI agent coordinating tasks"
+        />
+      </div>
+
+      <div class="code-block">
+        <code>
+          <span class="comment">/* Example first task prompt */</span><br /><br />
+          <span class="string">"Organize the files in this folder into subfolders</span><br />
+          <span class="string">&nbsp;by type: Documents, Images, Spreadsheets, and</span><br />
+          <span class="string">&nbsp;Other. Rename each file with today's date in</span><br />
+          <span class="string">&nbsp;YYYY-MM-DD format at the beginning."</span>
+        </code>
+      </div>
+
+      <p>
+        Once Claude starts working, you'll see real-time progress indicators. You can
+        follow along, steer mid-task, or step away entirely. For complex tasks, Claude
+        spins up multiple sub-agents working in parallel.
+      </p>
+
+      <div class="callout callout-warning">
+        <span class="iconify" data-icon="ph:monitor-fill"></span>
+        <p><strong>Keep the app open.</strong> Claude Desktop must remain open for the entire duration of the task. Closing the app or putting your computer to sleep will end the session.</p>
+      </div>
+    </section>
+
+
+    <!-- ── Section 6: Instructions ── -->
+    <section class="section animate-in" id="instructions">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:sliders-horizontal"></span>
+        Step 05
+      </div>
+      <h2>Set up global &amp; folder instructions</h2>
+      <p>
+        Cowork has no memory between sessions — every new task starts from scratch.
+        That's by design, but it means you'll want to configure standing instructions so
+        Claude already knows your preferences, tone, role, and output formats when each
+        session begins.
+      </p>
+
+      <div class="instruction-list">
+        <div class="instruction-item">
+          <div class="instruction-number"><span class="iconify" data-icon="ph:globe" style="font-size:16px;color:#fff"></span></div>
+          <div class="instruction-content">
+            <h4>Global instructions</h4>
+            <p>
+              Navigate to <strong>Settings → Cowork</strong> and click "Edit" next to
+              <em>Global instructions</em>. Add details like your role, preferred
+              output format, and tone of voice. These apply to every Cowork session.
+            </p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-number"><span class="iconify" data-icon="ph:folder-open" style="font-size:16px;color:#fff"></span></div>
+          <div class="instruction-content">
+            <h4>Folder instructions</h4>
+            <p>
+              Add a markdown file (like <code>INSTRUCTIONS.md</code>) inside your
+              working folder with project-specific context. Claude reads it
+              automatically and can even update it during a session.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <code>
+          <span class="comment"># Example: Global instructions</span><br /><br />
+          <span class="keyword">Role:</span> <span class="string">Senior Product Manager at a B2B SaaS company</span><br />
+          <span class="keyword">Tone:</span> <span class="string">Professional but conversational, no jargon</span><br />
+          <span class="keyword">Format:</span> <span class="string">Always use bullet points for action items</span><br />
+          <span class="keyword">Outputs:</span> <span class="string">Prefer .docx for reports, .xlsx for data</span>
+        </code>
+      </div>
+    </section>
+
+
+    <!-- ── Section 7: Connectors ── -->
+    <section class="section animate-in" id="connectors">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:plugs-connected"></span>
+        Step 06
+      </div>
+      <h2>Connect your tools</h2>
+      <p>
+        Connectors let Cowork pull context from the services you already use — Slack,
+        Google Drive, Notion, Figma, and dozens more. Once connected, Claude can search
+        your Slack history, reference Google Docs, or pull data from Notion pages
+        mid-task.
+      </p>
+
+      <div class="instruction-list">
+        <div class="instruction-item">
+          <div class="instruction-number">1</div>
+          <div class="instruction-content">
+            <h4>Open Settings → Connectors</h4>
+            <p>Browse the connector directory inside Claude Desktop settings.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-number">2</div>
+          <div class="instruction-content">
+            <h4>Add your services</h4>
+            <p>Click "Add" on any connector you want. Authenticate with each service when prompted.</p>
+          </div>
+        </div>
+        <div class="instruction-item">
+          <div class="instruction-number">3</div>
+          <div class="instruction-content">
+            <h4>Reference them in tasks</h4>
+            <p>Once connected, simply mention the tool in your prompt: <em>"Search my Slack for the latest design review notes."</em></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="iconify" data-icon="ph:gift-fill"></span>
+        <p><strong>All connectors are free</strong> and included with your paid Claude subscription. No additional cost to enable any of them.</p>
+      </div>
+    </section>
+
+
+    <!-- ── Section 8: Schedule ── -->
+    <section class="section animate-in" id="schedule">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:calendar-check"></span>
+        Step 07
+      </div>
+      <h2>Schedule recurring tasks</h2>
+      <p>
+        One of Cowork's most powerful features is the ability to set up tasks that run
+        automatically on a cadence you define. Type <code>/schedule</code> in any task,
+        or click "Scheduled" in the left sidebar to create and manage recurring
+        automations.
+      </p>
+
+      <div class="section-image">
+        <img
+          src="https://mcp-tools-z-image-turbo.hf.space/--replicas/w2rzk/gradio_api/file=/tmp/gradio/2a1cf8489bef6e83507a3182266f302a52132c1efbd097a4b1f8469e79940e71/image.webp"
+          alt="Scheduling and automation concept"
+        />
+      </div>
+
+      <div class="callout callout-warning">
+        <span class="iconify" data-icon="ph:power-fill"></span>
+        <p><strong>Important:</strong> Scheduled tasks only run while your computer is awake and Claude Desktop is open. Tasks won't execute if the app is closed or your machine is sleeping.</p>
+      </div>
+
+      <p>
+        Scheduling is ideal for recurring reports, daily file cleanup routines,
+        periodic research digests, or any workflow you find yourself repeating. Define
+        the task once and let Claude handle the rest.
+      </p>
+    </section>
+
+
+    <!-- ── Section 9: Use Cases ── -->
+    <section class="section animate-in" id="use-cases">
+      <div class="step-label">
+        <span class="iconify" data-icon="ph:compass"></span>
+        What's Next
+      </div>
+      <h2>What you can build from here</h2>
+      <p>
+        Once your setup is complete, the real power of Cowork is in how you use it.
+        Here are some of the most popular starting points.
+      </p>
+
+      <div class="use-case-grid">
+        <div class="use-case">
+          <span class="iconify" data-icon="ph:folders"></span>
+          <h4>File Organization</h4>
+          <p>Sort hundreds of files into categorized folders, batch rename with consistent patterns, clean up downloads.</p>
+        </div>
+        <div class="use-case">
+          <span class="iconify" data-icon="ph:file-xls"></span>
+          <h4>Spreadsheets &amp; Data</h4>
+          <p>Generate Excel files with working formulas, conditional formatting, and multiple tabs from raw data.</p>
+        </div>
+        <div class="use-case">
+          <span class="iconify" data-icon="ph:presentation-chart"></span>
+          <h4>Presentations</h4>
+          <p>Turn meeting transcripts, rough notes, or research into polished slide decks automatically.</p>
+        </div>
+        <div class="use-case">
+          <span class="iconify" data-icon="ph:receipt"></span>
+          <h4>Expense Reports</h4>
+          <p>Drop receipt screenshots in a folder and get back a formatted expense spreadsheet with categories.</p>
+        </div>
+        <div class="use-case">
+          <span class="iconify" data-icon="ph:magnifying-glass"></span>
+          <h4>Research Synthesis</h4>
+          <p>Combine web searches, articles, and notes into coherent, well-sourced reports and summaries.</p>
+        </div>
+        <div class="use-case">
+          <span class="iconify" data-icon="ph:chart-line-up"></span>
+          <h4>Data Analysis</h4>
+          <p>Outlier detection, cross-tabulation, time-series analysis, and visualizations on your data files.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ═══ CTA FOOTER ═══ -->
+  <section class="cta-footer">
+    <h2>Ready to get started?</h2>
+    <p>
+      Download Claude Desktop, switch to the Cowork tab, and hand off your first task today.
+    </p>
+    <a href="https://claude.com/download" class="btn-primary" target="_blank">
+      Download Claude Desktop
+      <span class="iconify" data-icon="ph:arrow-right"></span>
+    </a>
+  </section>
+
+  <footer>
+    <p>
+      Guide based on official Anthropic documentation.
+      For the full reference, visit
+      <a href="https://support.claude.com/en/articles/13345190-get-started-with-cowork" target="_blank">Claude Help Center</a>.
+    </p>
+  </footer>
+
+
+  <!-- ═══ SCROLL ANIMATION ═══ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.animate-in').forEach((el) => {
+        observer.observe(el);
+      });
+    });
+  </script>
+</body>
+</html>
