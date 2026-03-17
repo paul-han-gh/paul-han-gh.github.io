@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Island — May 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:             #f4f1ec;
+      --surface:        #ffffff;
+      --dark:           #1c1917;
+      --dark-2:         #292524;
+      --text-1:         #1c1917;
+      --text-2:         #78716c;
+      --text-3:         #a8a29e;
+      --accent:         #b5451b;
+      --accent-warm:    #cc5522;
+      --accent-light:   #fdf0e8;
+      --border:         #e5e0d8;
+      --border-strong:  #d4cec4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HERO ─────────────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 44% 56%;
+      min-height: 100dvh;
+    }
+
+    .hero-left {
+      background: var(--dark);
+      padding: 2.75rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 15% 85%, rgba(181,69,27,.15) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--accent-warm);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(3.8rem, 6.5vw, 6.2rem);
+      font-weight: 900;
+      line-height: .9;
+      letter-spacing: -.04em;
+      color: #fff;
+    }
+
+    .hero-title em {
+      font-style: normal;
+      color: var(--accent-warm);
+    }
+
+    .hero-sub {
+      margin-top: 2rem;
+      font-size: .95rem;
+      font-weight: 400;
+      color: rgba(255,255,255,.38);
+      line-height: 1.7;
+      max-width: 30ch;
+    }
+
+    .hero-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .hero-wordmark {
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.28);
+    }
+
+    .hero-pill {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: .35rem .8rem;
+      border-radius: 100px;
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(4px);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    .stat-label {
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.28);
+      margin-bottom: .35rem;
+    }
+
+    .stat-value {
+      font-size: .95rem;
+      font-weight: 600;
+      color: rgba(255,255,255,.8);
+      line-height: 1.25;
+    }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      will-change: transform;
+      transition: transform 10s ease-out;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--dark) 0%, rgba(28,25,23,.2) 35%, transparent 65%);
+      pointer-events: none;
+    }
+
+    /* ─── STRIP ─────────────────────────────────────── */
+    .strip {
+      background: var(--dark-2);
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+
+    .strip-inner {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+    }
+
+    .strip-item {
+      padding: 1.8rem 2.5rem;
+      border-right: 1px solid rgba(255,255,255,.06);
+    }
+
+    .strip-item:last-child { border-right: none; }
+
+    .strip-label {
+      font-size: .6rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.28);
+      margin-bottom: .4rem;
+    }
+
+    .strip-value {
+      font-size: .95rem;
+      font-weight: 500;
+      color: rgba(255,255,255,.72);
+    }
+
+    /* ─── CONTAINER / SECTION ─────────────────────── */
+    .container {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
+
+    .section { padding: 6rem 0; }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 3rem;
+    }
+
+    /* ─── DAY HEADER ─────────────────────────────── */
+    .day-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: end;
+      margin-bottom: 4.5rem;
+    }
+
+    .day-number {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .75rem;
+    }
+
+    .day-title {
+      font-size: clamp(2.4rem, 3.5vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.035em;
+      line-height: 1;
+      color: var(--text-1);
+    }
+
+    .day-date {
+      font-size: .88rem;
+      color: var(--text-3);
+      margin-top: .9rem;
+      font-weight: 400;
+    }
+
+    .day-desc {
+      font-size: .98rem;
+      color: var(--text-2);
+      line-height: 1.75;
+      max-width: 38ch;
+    }
+
+    /* ─── TIMELINE ───────────────────────────────── */
+    .timeline { position: relative; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 130px;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .tl-time {
+      text-align: right;
+      padding-top: 1.6rem;
+      position: relative;
+    }
+
+    .tl-time::after {
+      content: '';
+      position: absolute;
+      right: -2.5rem;
+      top: 1.95rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translateX(50%);
+      border: 2px solid var(--bg);
+    }
+
+    .time-label {
+      display: block;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: var(--text-2);
+    }
+
+    .time-sub {
+      display: block;
+      font-size: .62rem;
+      color: var(--text-3);
+      margin-top: .2rem;
+      font-weight: 400;
+    }
+
+    /* ─── CARDS ──────────────────────────────────── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      overflow: hidden;
+      transition:
+        transform .35s cubic-bezier(.16,1,.3,1),
+        box-shadow .35s cubic-bezier(.16,1,.3,1);
+      will-change: transform;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 48px -16px rgba(28,25,23,.1);
+    }
+
+    .card:active {
+      transform: translateY(-1px) scale(.998);
+    }
+
+    .card-split {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+    }
+
+    .card-inner {
+      padding: 1.75rem 2rem;
+    }
+
+    .card-img-wrap {
+      overflow: hidden;
+    }
+
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .6s cubic-bezier(.16,1,.3,1);
+    }
+
+    .card:hover .card-img-wrap img {
+      transform: scale(1.04);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .62rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .3rem .7rem;
+      border-radius: 100px;
+      margin-bottom: .9rem;
+    }
+
+    .tag-default  { color: var(--accent);    background: var(--accent-light); }
+    .tag-tbd      { color: var(--text-2);    background: var(--bg); }
+    .tag-alert    { color: #92400e;           background: #fef3c7; }
+    .tag-rose     { color: #9f1239;           background: #fff1f2; }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--text-1);
+      margin-bottom: .5rem;
+      line-height: 1.25;
+    }
+
+    .card-body {
+      font-size: .875rem;
+      color: var(--text-2);
+      line-height: 1.7;
+    }
+
+    .card-note {
+      margin-top: 1rem;
+      padding: .75rem 1rem;
+      border-radius: .6rem;
+      font-size: .8rem;
+      line-height: 1.6;
+      border-left: 2px solid var(--accent);
+      background: var(--accent-light);
+      color: #7c3c1a;
+    }
+
+    .card-note.warn {
+      border-left-color: #d97706;
+      background: #fffbeb;
+      color: #78350f;
+    }
+
+    .card-note strong {
+      font-weight: 700;
+    }
+
+    /* ─── LOGISTICS ──────────────────────────────── */
+    .logistics-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .logi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      transition: transform .35s cubic-bezier(.16,1,.3,1);
+      will-change: transform;
+    }
+
+    .logi-card:hover { transform: translateY(-3px); }
+
+    .logi-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      background: var(--accent-light);
+      border-radius: .75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.25rem;
+      color: var(--accent);
+    }
+
+    .logi-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -.015em;
+      color: var(--text-1);
+      margin-bottom: .6rem;
+    }
+
+    .logi-body {
+      font-size: .84rem;
+      color: var(--text-2);
+      line-height: 1.75;
+    }
+
+    .logi-body strong {
+      color: var(--text-1);
+      font-weight: 600;
+    }
+
+    .logi-card.dark {
+      background: var(--dark);
+      border-color: var(--dark-2);
+    }
+
+    .logi-card.dark .logi-icon {
+      background: rgba(181,69,27,.18);
+      color: var(--accent-warm);
+    }
+
+    .logi-card.dark .logi-title { color: rgba(255,255,255,.9); }
+    .logi-card.dark .logi-body  { color: rgba(255,255,255,.45); }
+    .logi-card.dark .logi-body strong { color: rgba(255,255,255,.82); }
+
+    /* ─── FOOTER ─────────────────────────────────── */
+    .footer {
+      background: var(--dark);
+      padding: 2rem 0;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-l {
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .06em;
+      color: rgba(255,255,255,.22);
+    }
+
+    .footer-r {
+      font-size: .7rem;
+      color: rgba(255,255,255,.16);
+    }
+
+    /* ─── SCROLL REVEAL ──────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity .7s cubic-bezier(.16,1,.3,1),
+        transform .7s cubic-bezier(.16,1,.3,1);
+    }
+
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity .6s cubic-bezier(.16,1,.3,1),
+        transform .6s cubic-bezier(.16,1,.3,1);
+    }
+
+    .stagger.in > *:nth-child(1)  { opacity:1; transform:translateY(0); transition-delay:  0ms; }
+    .stagger.in > *:nth-child(2)  { opacity:1; transform:translateY(0); transition-delay: 70ms; }
+    .stagger.in > *:nth-child(3)  { opacity:1; transform:translateY(0); transition-delay:140ms; }
+    .stagger.in > *:nth-child(4)  { opacity:1; transform:translateY(0); transition-delay:210ms; }
+    .stagger.in > *:nth-child(5)  { opacity:1; transform:translateY(0); transition-delay:280ms; }
+    .stagger.in > *:nth-child(6)  { opacity:1; transform:translateY(0); transition-delay:350ms; }
+    .stagger.in > *:nth-child(7)  { opacity:1; transform:translateY(0); transition-delay:420ms; }
+
+    /* ─── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 55vw; min-height: 260px; }
+      .hero-left  { padding: 2rem 1.75rem; min-height: auto; }
+      .hero-stats { gap: 1rem; }
+      .strip-inner  { grid-template-columns: repeat(2,1fr); }
+      .strip-item   { border-bottom: 1px solid rgba(255,255,255,.06); }
+      .strip-item:nth-child(even)  { border-right: none; }
+      .strip-item:nth-last-child(-n+2) { border-bottom: none; }
+      .day-header    { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2.5rem; }
+      .timeline::before { left: 72px; }
+      .timeline-item     { grid-template-columns: 72px 1fr; gap: 1.5rem; }
+      .tl-time::after    { right: -1.5rem; }
+      .card-split        { grid-template-columns: 1fr; }
+      .card-img-wrap     { height: 200px; order: -1; }
+      .logistics-grid    { grid-template-columns: 1fr; }
+      .container { padding: 0 1.25rem; }
+      .divider   { margin: 0 1.25rem; }
+      .section   { padding: 4rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ──────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-left">
+    <nav class="hero-nav">
+      <span class="hero-wordmark">Trip Itinerary</span>
+      <span class="hero-pill">May 2026</span>
+    </nav>
+
+    <div>
+      <p class="hero-eyebrow">Hawai'i — The Big Island</p>
+      <h1 class="hero-title">Big<br><em>Island</em><br>2026</h1>
+      <p class="hero-sub">Two days crossing from sea-level coffee farms to the frozen summit of the highest peak in the Pacific — then back down to a waterfall before the flights home.</p>
+    </div>
+
+    <div class="hero-stats">
+      <div>
+        <p class="stat-label">Travelers</p>
+        <p class="stat-value">6 People</p>
+      </div>
+      <div>
+        <p class="stat-label">Dates</p>
+        <p class="stat-value">May 16–17</p>
+      </div>
+      <div>
+        <p class="stat-label">Home Base</p>
+        <p class="stat-value">Hawi, HI</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img src="https://images.trvl-media.com/place/6289981/029bb032-77cc-496d-8681-608ab655ddca.jpg" alt="Big Island landscape" id="hero-img" loading="eager">
+    <div class="hero-overlay"></div>
+  </div>
+</section>
+
+<!-- ── STRIP ─────────────────────────────────────────── -->
+<div class="strip">
+  <div class="container">
+    <div class="strip-inner">
+      <div class="strip-item">
+        <p class="strip-label">Accommodation</p>
+        <p class="strip-value">Complimentary · Hawi</p>
+      </div>
+      <div class="strip-item">
+        <p class="strip-label">Transport</p>
+        <p class="strip-value">1-Day 4WD · Split 6 Ways</p>
+      </div>
+      <div class="strip-item">
+        <p class="strip-label">Arrival</p>
+        <p class="strip-value">Earliest Flight into KOA</p>
+      </div>
+      <div class="strip-item">
+        <p class="strip-label">Summit Elevation</p>
+        <p class="strip-value">13,796 ft — Mauna Kea</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── DAY 1 ──────────────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+
+    <div class="day-header reveal">
+      <div>
+        <p class="day-number">Day One</p>
+        <h2 class="day-title">Arrival<br>&amp; The Summit</h2>
+        <p class="day-date">Saturday · May 16, 2026</p>
+      </div>
+      <p class="day-desc">From the tarmac to 13,796 feet — a day that begins with coffee and ends watching the sun sink below a sea of clouds.</p>
+    </div>
+
+    <div class="timeline stagger">
+
+      <!-- 1. Fly in -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">Early AM</span>
+          <span class="time-sub">Earliest flight</span>
+        </div>
+        <div class="card">
+          <div class="card-split">
+            <div class="card-inner">
+              <span class="tag tag-default">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 2c-2-2-4-2-5.5-.5L10 5 1.8 6.2l3.9 3.9-1.1 4.3 4.3-1.1 3.9 3.9z"/></svg>
+                Departure
+              </span>
+              <h3 class="card-title">Fly into Kona International</h3>
+              <p class="card-body">Book the earliest available flight into Ellison Onizuka Kona International Airport (KOA). Getting on island early is critical — you want maximum daylight before the summit drive.</p>
+            </div>
+            <div class="card-img-wrap">
+              <img src="https://airports.hawaii.gov/koa/wp-content/uploads/sites/11/2016/07/KOA-02-2-7-08.jpg" alt="Kona airport" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Coffee Farm -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">Morning</span>
+          <span class="time-sub">~8:30 AM</span>
+        </div>
+        <div class="card">
+          <div class="card-split">
+            <div class="card-inner">
+              <span class="tag tag-default">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+                First Stop
+              </span>
+              <h3 class="card-title">Kona Coffee Farm Tour</h3>
+              <p class="card-body">Right off the plane, head to the slopes of Hualalai where the world-famous Kona coffee belt begins. A guided farm tour covers the full growing and milling process — end with a tasting flight before hitting the road.</p>
+              <div class="card-note">Several farms along Mamalahoa Highway offer walk-in tours. Greenwell Farms and Mountain Thunder are reliable options that don't require advance booking.</div>
+            </div>
+            <div class="card-img-wrap">
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAB1lmZg1D10huiTbNw5QKByCZNhvwzqE8qw&s" alt="Coffee farm" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Midday TBD -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">Midday</span>
+          <span class="time-sub">12 PM – 4 PM</span>
+        </div>
+        <div class="card">
+          <div class="card-inner">
+            <span class="tag tag-tbd">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              To Be Decided
+            </span>
+            <h3 class="card-title">Afternoon Block — Open</h3>
+            <p class="card-body">This window is unplanned. Options in the area include Puuhonua o Honaunau National Historical Park (the Place of Refuge), a snorkel at Kealakekua Bay, or a slow lunch in Kailua-Kona town before the drive north to Saddle Road.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Fill Up Gas -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">~5:00 PM</span>
+          <span class="time-sub">2 hrs before sunset</span>
+        </div>
+        <div class="card">
+          <div class="card-inner">
+            <span class="tag tag-alert">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 22V11a2 2 0 0 1 .6-1.4l6-6a2 2 0 0 1 2.8 0l6 6A2 2 0 0 1 19 11v11"/><path d="M15 22v-6a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v6"/><path d="M19 8h2a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-2"/></svg>
+              Pre-Summit Prep
+            </span>
+            <h3 class="card-title">Fill Up — Last Gas Before the Mountain</h3>
+            <p class="card-body">Fill the tank completely at the last gas station before Saddle Road. Once you pass Hilo or Waimea and head toward the access road, options disappear. Load up on water and snacks at the same stop.</p>
+            <div class="card-note warn"><strong>Do not skip this.</strong> There are zero gas stations or food services on Mauna Kea Access Road or at the summit.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Mauna Kea Sunset -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">~5:30 PM</span>
+          <span class="time-sub">Summit by sunset</span>
+        </div>
+        <div class="card">
+          <div class="card-split">
+            <div class="card-inner">
+              <span class="tag tag-default">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                Main Event
+              </span>
+              <h3 class="card-title">Mauna Kea Summit — Sunset Over the Clouds</h3>
+              <p class="card-body">Drive the Mauna Kea Access Road to the 13,796-ft summit. The view from above the cloud layer as the sun sets is one of the rarest sights on Earth. Arrive 30–45 minutes before sunset to find your spot. Sunset is around 7:13 PM in mid-May.</p>
+              <div class="card-note warn">
+                <strong>Heavy winter wear required — no exceptions.</strong> Temperatures at the summit drop below freezing after sundown. Everyone must bring an insulated jacket, gloves, and a warm hat. The wind chill at this altitude is severe.
+              </div>
+            </div>
+            <div class="card-img-wrap">
+              <img src="https://kohalacoastpropertiesinc.com/wp-content/uploads/2018/12/5539203445_959c8f3cd7_b.jpg" alt="Mauna Kea summit" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Stargazing -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">After Dark</span>
+          <span class="time-sub">~8:00 PM+</span>
+        </div>
+        <div class="card">
+          <div class="card-split">
+            <div class="card-inner">
+              <span class="tag tag-default">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Night Sky
+              </span>
+              <h3 class="card-title">Stargazing — Visitor Information Station</h3>
+              <p class="card-body">After the summit, drive down to the Maunakea Visitor Information Station at 9,200 ft — the nearest parking lot on the descent. The VIS hosts free nightly stargazing programs with public telescopes. At this elevation, far above the marine layer, the sky is extraordinarily dark and clear.</p>
+              <div class="card-note">Free, no reservation required. Programs run nightly from around 6 PM, weather permitting. The temperature here is far more manageable than the summit.</div>
+            </div>
+            <div class="card-img-wrap">
+              <img src="https://www.hawaiimagazine.com/wp-content/uploads/2020/12/stargazers.jpg" alt="Stargazing" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Drive to Hawi -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">Late Night</span>
+          <span class="time-sub">~10:00 PM+</span>
+        </div>
+        <div class="card">
+          <div class="card-inner">
+            <span class="tag tag-default">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Overnight
+            </span>
+            <h3 class="card-title">Drive to Hawi — Settle In</h3>
+            <p class="card-body">From the Visitor Station it's roughly 45 minutes north to Hawi. Check into Kimia's father's 3-bedroom property — your complimentary base for the night. Rest well. If weather cooperates, Day 2 starts early.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── DAY 2 ──────────────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+
+    <div class="day-header reveal">
+      <div>
+        <p class="day-number">Day Two</p>
+        <h2 class="day-title">Waterfalls<br>&amp; Farewells</h2>
+        <p class="day-date">Sunday · May 17, 2026</p>
+      </div>
+      <p class="day-desc">An early hike through the Kohala rain forest — then four head for the airport while Joe and Peachy write the rest of the day for themselves.</p>
+    </div>
+
+    <div class="timeline stagger">
+
+      <!-- 1. Morning Hike -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">Early AM</span>
+          <span class="time-sub">Clear weather only</span>
+        </div>
+        <div class="card">
+          <div class="card-split">
+            <div class="card-inner">
+              <span class="tag tag-default">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 17 4-8 4 4 4-6 4 10"/></svg>
+                Morning Hike
+              </span>
+              <h3 class="card-title">Kohala Waterfall Slide Hike</h3>
+              <p class="card-body">If the overnight brings clear skies, head out for a hike near Hawi featuring natural water plumes and rock slides. The Kohala Ditch Trail system winds through dense jungle leading to exactly this — sliding pools carved through volcanic rock by centuries of flow.</p>
+              <div class="card-note warn"><strong>Clear weather only.</strong> Flash flooding is a real risk in Kohala's narrow gulches. If there was any rain overnight or in the forecast, skip this and save it for next time.</div>
+            </div>
+            <div class="card-img-wrap">
+              <img src="https://1lifeonearth.com/wp-content/uploads/2018/10/DSC_2804-2000-7-.jpg" alt="Kohala waterfall hike" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Group Splits -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">Post-Hike</span>
+          <span class="time-sub">Midday</span>
+        </div>
+        <div class="card">
+          <div class="card-inner">
+            <span class="tag tag-default">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 2c-2-2-4-2-5.5-.5L10 5 1.8 6.2l3.9 3.9-1.1 4.3 4.3-1.1 3.9 3.9z"/></svg>
+              Departure
+            </span>
+            <h3 class="card-title">Four Travelers Head to KOA</h3>
+            <p class="card-body">After the hike, four members of the group drive south to Kona International Airport. Allow 1–1.5 hours from Hawi to the airport, plus time to return the 4WD rental. Coordinate the vehicle dropoff the night before to avoid a rushed morning.</p>
+            <div class="card-note">Return the rental car before check-in. The Hawi-to-Kona drive on Akoni Pule Highway is scenic but not fast — leave with buffer time.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Joe & Peachy -->
+      <div class="timeline-item">
+        <div class="tl-time">
+          <span class="time-label">Ongoing</span>
+          <span class="time-sub">Their call</span>
+        </div>
+        <div class="card">
+          <div class="card-inner">
+            <span class="tag tag-rose">
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              One Year
+            </span>
+            <h3 class="card-title">Joe &amp; Peachy — One Year of Marriage</h3>
+            <p class="card-body">Joe and Peachy stay behind to mark their first anniversary on the island. The rest of the itinerary is theirs. Waipio Valley lookout, a quiet beach along the Kohala Coast, or simply nothing — they've earned the day.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /timeline -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── LOGISTICS ──────────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+
+    <div class="day-header reveal" style="margin-bottom:3rem;">
+      <div>
+        <p class="day-number">Logistics</p>
+        <h2 class="day-title">What to Know<br>Before You Go</h2>
+      </div>
+      <p class="day-desc">Practical details on accommodation, the rental vehicle, and what to pack for the summit.</p>
+    </div>
+
+    <div class="logistics-grid stagger">
+
+      <div class="logi-card">
+        <div class="logi-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3 class="logi-title">Accommodation</h3>
+        <p class="logi-body">
+          <strong>Location:</strong> Hawi, North Kohala<br><br>
+          <strong>Property:</strong> Kimia's father's 3-bedroom home<br><br>
+          <strong>Cost:</strong> Complimentary — no lodging expense. Consider a thoughtful thank-you for the host before arriving.
+        </p>
+      </div>
+
+      <div class="logi-card">
+        <div class="logi-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <h3 class="logi-title">4WD Rental</h3>
+        <p class="logi-body">
+          <strong>Duration:</strong> 1 day<br><br>
+          <strong>Required:</strong> 4WD is mandatory above the Mauna Kea VIS. Standard vehicles are prohibited on the summit road.<br><br>
+          <strong>Cost:</strong> Split equally, 6 ways.
+        </p>
+      </div>
+
+      <div class="logi-card dark">
+        <div class="logi-icon">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3 class="logi-title">What to Pack</h3>
+        <p class="logi-body">
+          <strong>Heavy insulated jacket</strong> — Summit is below freezing<br><br>
+          <strong>Gloves + warm hat</strong> — Wind chill at 13,796 ft is brutal<br><br>
+          <strong>Swimwear + water shoes</strong> — Waterfall hike on Day 2<br><br>
+          <strong>Snacks + water</strong> — No services on the summit road
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-l">Big Island · May 16–17, 2026 · Six Travelers</span>
+      <span class="footer-r">Hawi, Hawai'i</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Scroll Reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
+
+  document.querySelectorAll('.reveal, .stagger').forEach(el => io.observe(el));
+
+  // ── Hero image subtle parallax
+  const heroImg = document.getElementById('hero-img');
+  if (heroImg) {
+    const heroEl = document.querySelector('.hero');
+    window.addEventListener('scroll', () => {
+      const sy = window.scrollY;
+      if (sy < heroEl.offsetHeight) {
+        heroImg.style.transform = `scale(1.04) translateY(${sy * 0.06}px)`;
+      }
+    }, { passive: true });
+  }
+</script>
+
+</body>
+</html>
