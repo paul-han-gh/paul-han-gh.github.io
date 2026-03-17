@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Crash Course Presentation</title>
+    
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@300;400;700;900&family=Noto+Serif:ital,wght@1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #111;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            cursor: default;
+        }
+
+        .hidden-cursor { cursor: none !important; }
+
+        #presentation { width: 100%; height: 100%; position: relative; }
+
+        .slide {
+            display: none; /* Hidden by default */
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: white;
+        }
+
+        /* Default Active State (Flexbox) */
+        .slide.active { display: flex; }
+
+        /* --- PALETTE --- */
+        :root {
+            --color-dark: #1e1e1e;
+            --color-peach: #f2c1b0;
+            --color-mint: #b8e2d8;
+            --color-white: #ffffff;
+            --color-grey: #f4f4f4;
+            --color-grey-darker: #e0e0e0;
+            --color-red-pen: #ff4d4d;
+        }
+
+        /* --- SLIDE 1 (Title) --- */
+        .slide-1 { flex-direction: row; }
+        .s1-left { flex: 1; background-color: var(--color-dark); color: var(--color-white); display: flex; flex-direction: column; justify-content: center; padding: 6rem; }
+        .s1-right { flex: 1; background-color: var(--color-peach); display: flex; align-items: center; justify-content: center; position: relative; }
+        .s1-eyebrow { text-transform: uppercase; letter-spacing: 4px; font-size: 0.9rem; margin-bottom: 1.5rem; opacity: 0.7; }
+        .slide-1 h1 { font-size: 5rem; font-weight: 900; line-height: 1.1; margin-bottom: 2rem; }
+        .s1-subtitle { font-size: 1.5rem; font-weight: 300; opacity: 0.9; border-left: 4px solid var(--color-peach); padding-left: 20px; }
+        .s1-icon { font-size: 20rem; color: var(--color-dark); opacity: 0.1; }
+        .s1-overlay-icon { position: absolute; font-size: 8rem; color: var(--color-dark); }
+
+
+        /* --- SLIDE 2 (Grid Outline) --- */
+        .slide-2.active { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+        .grid-item { display: flex; flex-direction: column; justify-content: center; padding: 4rem; position: relative; }
+        .item-1 { background-color: var(--color-mint); color: var(--color-dark); }
+        .item-2 { background-color: var(--color-dark); color: var(--color-white); }
+        .item-3 { background-color: var(--color-grey); color: var(--color-dark); }
+        .item-4 { background-color: var(--color-peach); color: var(--color-dark); }
+        .week-label { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 1rem; opacity: 0.6; }
+        .topic-title { font-size: 3rem; font-weight: 900; line-height: 1; }
+        .item-2 .topic-title { font-size: 2.5rem; }
+        .grid-icon { position: absolute; bottom: 2rem; right: 2rem; font-size: 3rem; opacity: 0.2; }
+
+
+        /* --- SLIDE 3 (Pyramid) --- */
+        .slide-3 { flex-direction: column; align-items: center; justify-content: center; background-color: var(--color-grey); padding: 4rem; }
+        .s3-header { text-align: center; margin-bottom: 3rem; }
+        .s3-header h2 { font-size: 3.5rem; font-weight: 900; color: var(--color-dark); margin-bottom: 1rem; }
+        .pyramid-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 1200px; gap: 15px; }
+        .py-row { display: flex; justify-content: center; gap: 15px; width: 100%; }
+        .py-row.row-1 { width: 30%; }
+        .py-row.row-2 { width: 50%; }
+        .py-row.row-3 { width: 70%; }
+        .py-row.row-4 { width: 90%; }
+        .py-block { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 1.5rem; font-weight: 700; font-size: 1.2rem; border-radius: 4px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .py-block.dark { background-color: var(--color-dark); color: var(--color-white); font-size: 1.5rem; }
+        .py-block.peach { background-color: var(--color-peach); color: var(--color-dark); }
+        .py-block.mint { background-color: var(--color-mint); color: var(--color-dark); }
+        .py-block.grey { background-color: #fff; color: var(--color-dark); border: 2px solid #ddd;}
+        .py-row.row-4 .py-block { font-size: 1rem; }
+
+        /* --- SLIDE 4 (Correction) --- */
+        .slide-4 { flex-direction: column; align-items: center; justify-content: center; background-color: var(--color-dark); padding: 4rem; }
+        .s4-title { font-family: 'Noto Serif', serif; font-style: italic; font-size: 5rem; font-weight: 400; color: var(--color-white); margin-bottom: 6rem; letter-spacing: 2px; }
+        .correction-container { position: relative; display: inline-block; }
+        .original-word { font-size: 8rem; font-weight: 900; color: var(--color-white); opacity: 0.1; text-transform: uppercase; letter-spacing: -2px; }
+        .strikethrough { position: absolute; top: 50%; left: -5%; width: 110%; height: 8px; background-color: var(--color-red-pen); transform: rotate(-8deg); border-radius: 10px; z-index: 1; box-shadow: 0 0 10px rgba(230, 57, 70, 0.5); }
+        .new-word { position: absolute; top: -5rem; right: -2rem; font-family: 'Caveat', cursive; font-size: 8rem; color: var(--color-red-pen); transform: rotate(-4deg); z-index: 2; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+
+        /* --- SLIDE 5 (Principle 1) --- */
+        .slide-5 { flex-direction: row; }
+        .s5-left { width: 25%; background-color: var(--color-mint); display: flex; align-items: center; justify-content: center; position: relative; }
+        .s5-right { width: 75%; background-color: var(--color-white); display: flex; flex-direction: column; justify-content: center; padding: 6rem; }
+        .s5-vertical-text { writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); font-size: 4rem; font-weight: 900; color: var(--color-dark); text-transform: uppercase; letter-spacing: 8px; opacity: 0.8; height: 80%; text-align: center; }
+        .s5-eyebrow { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--color-dark); margin-bottom: 3rem; border-bottom: 2px solid var(--color-mint); display: inline-block; padding-bottom: 10px; }
+        .s5-quote { font-size: 3rem; font-weight: 300; line-height: 1.4; color: var(--color-dark); margin-bottom: 3rem; }
+        .s5-citation { font-family: 'Noto Serif', serif; font-style: italic; font-size: 1.5rem; color: var(--color-dark); background-color: var(--color-peach); padding: 1rem 2rem; align-self: flex-start; border-radius: 50px; }
+
+        /* --- SLIDE 6 (Exercise) --- */
+        .slide-6 { background-color: var(--color-peach); flex-direction: column; align-items: center; justify-content: center; padding: 4rem; text-align: center; }
+        .s6-eyebrow { font-size: 1.2rem; text-transform: uppercase; letter-spacing: 6px; font-weight: 700; margin-bottom: 2rem; color: var(--color-dark); opacity: 0.7; }
+        .s6-title { font-size: 5rem; font-weight: 900; color: var(--color-dark); margin-bottom: 3rem; line-height: 1.1; }
+        .s6-timer-badge { background-color: var(--color-dark); color: var(--color-white); font-size: 3rem; font-weight: 700; padding: 1.5rem 4rem; border-radius: 100px; display: inline-flex; align-items: center; gap: 20px; margin-bottom: 4rem; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .s6-prompt-box { background-color: rgba(255,255,255,0.4); padding: 3rem; border-radius: 20px; max-width: 900px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.5); }
+        .s6-prompt-text { font-size: 2rem; font-weight: 400; color: var(--color-dark); line-height: 1.5; }
+
+        /* --- SLIDE 7 (Tips) --- */
+        .slide-7 { background-color: var(--color-dark); flex-direction: column; align-items: center; justify-content: center; padding: 4rem 8rem; }
+        .s7-header { font-size: 3.5rem; color: var(--color-white); margin-bottom: 4rem; text-align: center; border-bottom: 4px solid var(--color-mint); padding-bottom: 1rem; }
+        .tips-container { width: 100%; max-width: 1000px; }
+        .tip-item { display: flex; align-items: flex-start; margin-bottom: 2rem; }
+        .tip-number { background-color: var(--color-mint); color: var(--color-dark); font-size: 1.5rem; font-weight: 900; width: 3rem; height: 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 2rem; flex-shrink: 0; }
+        .tip-text { font-size: 1.8rem; color: var(--color-white); font-weight: 300; line-height: 1.4; }
+
+        /* --- SLIDE 8 (Principle 2 with Image) --- */
+        .slide-8 { flex-direction: row; }
+        .s8-left { width: 25%; background-color: var(--color-mint); display: flex; align-items: center; justify-content: center; position: relative; }
+        .s8-vertical-text { writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg); font-size: 4rem; font-weight: 900; color: var(--color-dark); text-transform: uppercase; letter-spacing: 8px; opacity: 0.8; height: 80%; text-align: center; }
+        .s8-right { width: 75%; background-color: var(--color-white); display: flex; flex-direction: column; justify-content: center; padding: 4rem 6rem; }
+        .s8-eyebrow { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: var(--color-dark); margin-bottom: 2rem; border-bottom: 2px solid var(--color-mint); display: inline-block; padding-bottom: 10px; }
+        .s8-content-split { display: flex; gap: 4rem; align-items: center; }
+        .s8-text-col { flex: 5; }
+        .s8-img-col { flex: 4; display: flex; flex-direction: column; }
+        .s8-quote { font-size: 1.8rem; font-weight: 300; line-height: 1.5; color: var(--color-dark); margin-bottom: 2rem; }
+        .s8-citation { font-family: 'Noto Serif', serif; font-style: italic; font-size: 1.1rem; color: var(--color-dark); background-color: var(--color-peach); padding: 0.5rem 1.5rem; align-self: flex-start; border-radius: 50px; display: inline-block; }
+        .s8-img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: block; }
+        .s8-caption { font-size: 0.85rem; color: #888; margin-top: 1rem; text-align: right; font-style: italic; }
+
+        /* --- SLIDE 9 & 10 (Ground Rule 1 - Charts) --- */
+        .slide-9, .slide-10 {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-white);
+            padding: 2rem 6rem;
+        }
+
+        .s9-eyebrow {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #888;
+            margin-bottom: 1rem;
+        }
+
+        .s9-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--color-dark);
+            margin-bottom: 4rem;
+        }
+
+        .s9-chart-container {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+        }
+
+        /* SVG Text Styling */
+        .chart-label {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            fill: var(--color-dark);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-anchor: middle;
+        }
+        
+        .hype-path {
+            fill: none;
+            stroke: var(--color-red-pen);
+            stroke-width: 4;
+            stroke-dasharray: 10, 5;
+            opacity: 0.8;
+        }
+
+        .hype-label {
+            font-family: 'Caveat', cursive;
+            font-size: 20px;
+            fill: var(--color-red-pen);
+            text-anchor: middle;
+            font-weight: 700;
+        }
+
+        /* --- SLIDE 11 (Ground Rules 2 & 3) --- */
+        .slide-11 {
+            flex-direction: row;
+        }
+
+        .s11-half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .s11-mint { background-color: var(--color-mint); color: var(--color-dark); }
+        .s11-dark { background-color: var(--color-dark); color: var(--color-white); }
+
+        .s11-eyebrow { text-transform: uppercase; letter-spacing: 4px; opacity: 0.6; margin-bottom: 2rem; font-weight: 700; font-size: 1rem; }
+        .s11-title { font-size: 4rem; font-weight: 900; line-height: 1.1; z-index: 2; }
+        .s11-icon-bg { position: absolute; bottom: -5rem; right: -5rem; font-size: 25rem; opacity: 0.1; z-index: 1; }
+
+        /* --- SLIDE 12 (Prompt Engineering) --- */
+        .slide-12 {
+            background-color: var(--color-dark);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .s12-icon-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            font-size: 5rem;
+            color: var(--color-mint);
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+        
+        .s12-arrow { font-size: 3rem; opacity: 0.5; color: var(--color-white); }
+
+        .s12-title {
+            font-size: 7rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            color: var(--color-white);
+        }
+
+        .s12-subtitle {
+            font-family: 'Courier New', monospace; /* Tech feel */
+            font-size: 1.5rem;
+            color: var(--color-peach);
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 2rem;
+            display: inline-block;
+        }
+
+        /* --- SLIDE 13 (Context Engineering - Redesign) --- */
+        .slide-13 {
+            background-color: var(--color-peach); /* Light background */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .s13-icon-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            font-size: 5rem;
+            color: var(--color-dark); /* Dark icons on light bg */
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .s13-title {
+            font-size: 7rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 3rem;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            color: var(--color-dark); /* Dark text */
+        }
+
+        .s13-content-box {
+            border-top: 2px solid var(--color-dark);
+            padding-top: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 800px;
+        }
+
+        .s13-item {
+            font-family: 'Inter', sans-serif; /* Clean sans-serif instead of mono */
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--color-dark);
+            line-height: 1.3;
+        }
+        
+        .s13-arrow { font-size: 3rem; opacity: 0.4; }
+
+        /* --- SLIDE 14 (Markdown Demo) --- */
+        .slide-14 {
+            flex-direction: column;
+            background-color: var(--color-grey);
+            padding: 4rem;
+        }
+
+        .s14-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .s14-eyebrow {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #888;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .s14-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--color-dark);
+        }
+
+        .s14-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+            height: 60vh;
+        }
+
+        .s14-card {
+            flex: 1;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* RAW MARKDOWN SIDE */
+        .card-raw {
+            background-color: var(--color-dark);
+            color: var(--color-grey);
+            font-family: 'Courier New', monospace;
+            border: 1px solid #333;
+        }
+
+        .code-header {
+            background-color: #333;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            color: #aaa;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .window-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #555; }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+
+        .code-content {
+            padding: 2rem;
+            font-size: 1.4rem;
+            line-height: 1.6;
+        }
+
+        /* Syntax Highlighting Simulation */
+        .md-heading { color: var(--color-peach); font-weight: bold; }
+        .md-bold { color: var(--color-mint); }
+        .md-list { color: #aaa; }
+        .md-link { color: #4a90e2; text-decoration: underline; }
+
+        /* ARROW */
+        .s14-arrow {
+            font-size: 4rem;
+            color: var(--color-dark);
+            opacity: 0.5;
+        }
+
+        /* RENDERED SIDE */
+        .card-rendered {
+            background-color: var(--color-white);
+            color: var(--color-dark);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .browser-header {
+            background-color: #e0e0e0;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .browser-bar {
+            background-color: #fff;
+            width: 80%;
+            height: 12px;
+            border-radius: 20px;
+            opacity: 0.6;
+        }
+
+        .render-content {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .render-h1 { font-size: 2.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 0.5rem; }
+        .render-h2 { font-size: 1.5rem; font-weight: 700; color: #555; margin-bottom: 1rem; }
+        .render-p { font-size: 1.2rem; line-height: 1.5; color: #333; }
+        .render-bold { font-weight: 700; color: var(--color-dark); }
+        .render-list { margin-left: 1.5rem; font-size: 1.2rem; }
+        .render-li { margin-bottom: 0.5rem; }
+
+        /* --- SLIDE 15 (Markdown Exercise) --- */
+        .slide-15 {
+            background-color: var(--color-peach);
+            flex-direction: column;
+            padding: 2rem 4rem; /* Slightly less top padding to fit everything */
+        }
+
+        .s15-header-section {
+            text-align: center;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .s15-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--color-dark);
+            margin-bottom: 1rem;
+        }
+
+        .s15-timer {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 0.5rem 2rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .s15-content-wrapper {
+            display: flex;
+            gap: 3rem;
+            width: 100%;
+            height: 100%;
+            align-items: stretch;
+        }
+
+        .s15-card {
+            flex: 1;
+            border-radius: 16px;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Left Card: Base Text */
+        .s15-problem {
+            background-color: var(--color-white);
+        }
+
+        .s15-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            opacity: 0.6;
+        }
+
+        .s15-raw-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: var(--color-dark);
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+            height: 100%;
+        }
+
+        /* Right Card: Instructions */
+        .s15-instructions {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+        }
+
+        .s15-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .s15-list li {
+            font-size: 1.5rem;
+            line-height: 1.4;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .s15-list li::before {
+            content: '→';
+            color: var(--color-mint);
+            margin-right: 15px;
+            font-weight: 900;
+        }
+
+        .code-tag {
+            background-color: rgba(255,255,255,0.2);
+            font-family: 'Courier New', monospace;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: var(--color-mint);
+            font-weight: 700;
+            margin: 0 5px;
+        }
+
+        /* --- SLIDE 16 (Web Integration) --- */
+        .slide-16 {
+            flex-direction: column;
+            background-color: var(--color-grey);
+            padding: 4rem;
+        }
+
+        .s16-header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .s16-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--color-dark);
+        }
+
+        .s16-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            width: 100%;
+            height: 60vh;
+        }
+
+        .s16-card {
+            flex: 1;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* LEFT: CHAT UI */
+        .card-chat {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            color: #888;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #f9f9f9;
+        }
+
+        .chat-bubble {
+            background-color: var(--color-mint);
+            color: var(--color-dark);
+            padding: 1.5rem 2rem;
+            border-radius: 20px 20px 20px 0;
+            font-size: 2rem;
+            font-weight: 500;
+            align-self: flex-start;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--color-mint);
+            border-bottom-right-radius: 20px;
+            z-index: 0;
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            background-color: #fff;
+            border-top: 1px solid #eee;
+            color: #ccc;
+        }
+
+        /* RIGHT: WEB APP UI */
+        .card-app {
+            background-color: var(--color-dark);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-toolbar {
+            background-color: #222;
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .app-dot { width: 12px; height: 12px; border-radius: 50%; background-color: #444; }
+
+        .app-viewport {
+            flex: 1;
+            background-color: #f4f4f4;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 1rem;
+        }
+
+        /* Mock App Widgets */
+        .app-widget {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .w-full { grid-column: span 2; display: flex; align-items: center; justify-content: space-between;}
+        .w-tall { grid-row: span 2; }
+        
+        .mock-h1 { height: 20px; width: 40%; background-color: var(--color-dark); border-radius: 4px; margin-bottom: 20px; opacity: 0.8;}
+        .mock-bar { height: 10px; width: 80%; background-color: #ddd; border-radius: 4px; margin-bottom: 10px; }
+        .mock-graph { height: 100px; width: 100%; background-color: var(--color-peach); border-radius: 4px; margin-top: auto; opacity: 0.5; }
+        .mock-circle { height: 60px; width: 60px; border-radius: 50%; background-color: var(--color-mint); opacity: 0.8; }
+
+        /* --- SLIDE 17 (Web App Exercise) - ALIGN TOP --- */
+        .slide-17 {
+            background-color: var(--color-peach);
+            flex-direction: column;
+            padding: 2rem 4rem;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .s17-header-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-shrink: 0; /* Prevent header from squishing */
+        }
+
+        .s17-title-compact {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--color-dark);
+            line-height: 1;
+        }
+
+        .s17-timer-compact {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .s17-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            width: 100%;
+            height: 100%; /* Fill remaining height */
+            min-height: 0;
+            align-items: start; /* Align grid items to top */
+        }
+
+        .s17-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: 100%;
+        }
+
+        .s17-card {
+            background-color: var(--color-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            /* Align content to top */
+            justify-content: flex-start; 
+        }
+
+        .card-fill { 
+            flex: 1; /* Allow card to grow */
+            overflow-y: auto; /* Scroll if content gets too tall */
+        }
+
+        .s17-step-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .s17-step-num {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .s17-step-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+
+        .s17-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .s17-list {
+            list-style: disc;
+            margin-left: 1.2rem;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .s17-snippet-box {
+            background-color: var(--color-dark);
+            border-radius: 6px;
+            padding: 1rem;
+            border-left: 4px solid var(--color-mint);
+            font-family: 'Courier New', monospace;
+            color: #ddd;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-top: 0.5rem; /* Standard margin, not auto */
+        }
+
+        .s17-snippet-line { display: block; }
+        .s17-snippet-line::before { content: '- '; color: var(--color-mint); }
+
+        /* Process Items */
+        .s17-process-container {
+            display: flex;
+            flex-direction: column;
+            /* Align items to top */
+            justify-content: flex-start; 
+            gap: 2rem; /* Add explicit gap */
+            padding-top: 1rem;
+        }
+
+        .s17-process-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .s17-p-num {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--color-mint);
+            background-color: var(--color-dark);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* --- SLIDE 18 (Socratic Method) - COMPACT FIXED --- */
+        .slide-18 {
+            flex-direction: column;
+            background-color: var(--color-white);
+            padding: 2rem 4rem; /* Reduced padding */
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        .s18-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            flex-shrink: 0;
+        }
+
+        .s18-eyebrow {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #888;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .s18-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--color-dark);
+            line-height: 1.1;
+        }
+
+        .s18-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Spread items evenly */
+            flex: 1; /* Take all remaining height */
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-bottom: 1rem;
+        }
+
+        .s18-row {
+            display: flex;
+            width: 100%;
+            align-items: center; /* Center card vertically in its row */
+        }
+
+        .row-left { justify-content: flex-start; }
+        .row-right { justify-content: flex-end; }
+
+        .s18-card {
+            padding: 1rem 1.5rem; /* Tighter padding */
+            border-radius: 50px; /* Pill shape looks cleaner compact */
+            font-size: 1.2rem; /* Slightly smaller text */
+            font-weight: 500;
+            max-width: 70%; /* Allow slightly wider cards */
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .card-mint {
+            background-color: var(--color-mint);
+            color: var(--color-dark);
+            border-bottom-left-radius: 0;
+        }
+
+        .card-peach {
+            background-color: var(--color-peach);
+            color: var(--color-dark);
+            border-bottom-right-radius: 0;
+        }
+
+        .s18-num {
+            font-size: 0.9rem;
+            font-weight: 900;
+            background: rgba(255,255,255,0.4);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .s18-conclusion-box {
+            margin-top: 1.5rem;
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .s18-conc-label {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .s18-conc-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Noto Serif', serif;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        /* --- SLIDE 19 (Socratic Exercise) --- */
+        .slide-19 {
+            background-color: var(--color-peach);
+            flex-direction: column;
+            padding: 4rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .s19-card {
+            background-color: var(--color-white);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .s19-intro {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--color-grey);
+            text-align: center;
+        }
+
+        .s19-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .s19-step-item {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .s19-num {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .s19-text {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            color: var(--color-dark);
+        }
+
+        .highlight-red { color: var(--color-red-pen); font-weight: 700; }
+        .highlight-mint { color: #5fb3a1; font-weight: 700; } /* Darker mint for text readability */
+
+        /* --- SLIDE 20 (Skill 2: Different Models) --- */
+        .slide-20 {
+            background-color: var(--color-dark);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .s20-eyebrow {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--color-mint);
+            opacity: 0.8;
+        }
+
+        .s20-title {
+            font-size: 6rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 4rem;
+            color: var(--color-white);
+        }
+
+        .s20-icons-container {
+            display: flex;
+            gap: 4rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .s20-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .s20-icon-wrapper:hover { opacity: 1; }
+
+        .s20-icon {
+            font-size: 5rem;
+            color: var(--color-peach);
+        }
+
+        .s20-label {
+            font-family: 'Courier New', monospace;
+            color: var(--color-grey);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="presentation">
+        
+        <div class="slide slide-1 active">
+            <div class="s1-left">
+                <div class="s1-eyebrow">Presentation</div>
+                <h1>AI Crash<br>Course</h1>
+                <div class="s1-subtitle">From Casual User to Power User</div>
+            </div>
+            <div class="s1-right">
+                <span class="iconify s1-icon" data-icon="carbon:machine-learning-model"></span>
+                <span class="iconify s1-overlay-icon" data-icon="fluent:brain-circuit-24-filled"></span>
+            </div>
+        </div>
+
+        <div class="slide slide-2">
+            <div class="grid-item item-1">
+                <div class="week-label">Week 01</div>
+                <div class="topic-title">Fundamentals</div>
+                <span class="iconify grid-icon" data-icon="ph:cube-transparent-fill"></span>
+            </div>
+            <div class="grid-item item-2">
+                <div class="week-label">Weeks 02 - 03</div>
+                <div class="topic-title">Students' Choice</div>
+                <span class="iconify grid-icon" data-icon="ph:users-three-fill"></span>
+            </div>
+            <div class="grid-item item-3">
+                <div class="week-label">Week 04</div>
+                <div class="topic-title">Project Jam</div>
+                <span class="iconify grid-icon" data-icon="ph:rocket-launch-fill"></span>
+            </div>
+            <div class="grid-item item-4">
+                <div class="week-label">Week 05 (Optional)</div>
+                <div class="topic-title">Ethical Considerations</div>
+                <span class="iconify grid-icon" data-icon="ph:scales-fill"></span>
+            </div>
+        </div>
+
+        <div class="slide slide-3">
+            <div class="s3-header">
+                <h2>Today's Outline</h2>
+            </div>
+            <div class="pyramid-wrapper">
+                <div class="py-row row-1"><div class="py-block dark">The "Spirit"</div></div>
+                <div class="py-row row-2">
+                    <div class="py-block peach">Principle 1</div>
+                    <div class="py-block peach">Principle 2</div>
+                </div>
+                <div class="py-row row-3">
+                    <div class="py-block mint">Ground Rule 1</div>
+                    <div class="py-block mint">Ground Rule 2</div>
+                    <div class="py-block mint">Ground Rule 3</div>
+                </div>
+                <div class="py-row row-4">
+                    <div class="py-block grey">Practical Skill 1</div>
+                    <div class="py-block grey">Practical Skill 2</div>
+                    <div class="py-block grey">Practical Skill 3</div>
+                    <div class="py-block grey">Practical Skill 4</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-4">
+            <h2 class="s4-title">πνεῦμα</h2>
+            <div class="correction-container">
+                <span class="original-word">Consumer</span>
+                <span class="strikethrough"></span>
+                <span class="new-word">Steward</span>
+            </div>
+        </div>
+
+        <div class="slide slide-5">
+            <div class="s5-left">
+                <div class="s5-vertical-text">Principle 01</div>
+            </div>
+            <div class="s5-right">
+                <div class="s5-eyebrow">Count the Cost</div>
+                <div class="s5-quote">
+                    “But don’t begin until you count the cost. For who would begin construction of a building without first calculating the cost to see if there is enough money to finish it?”
+                </div>
+                <div class="s5-citation">~ Luke 14:28, NLT</div>
+            </div>
+        </div>
+
+        <div class="slide slide-6">
+            <div class="s6-eyebrow">Individual Exercise</div>
+            <h2 class="s6-title">Conversation with AI</h2>
+            <div class="s6-timer-badge">
+                <span class="iconify" data-icon="ph:timer-fill"></span>
+                5 Minutes
+            </div>
+            <div class="s6-prompt-box">
+                <div class="s6-prompt-text">
+                    Ask your LLM to help you identify any needed precautions—both short-term and long-term—when using AI.
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-7">
+            <h2 class="s7-header">Tips for the Exercise</h2>
+            <div class="tips-container">
+                <div class="tip-item">
+                    <div class="tip-number">1</div>
+                    <div class="tip-text">For context, add a little profile about yourself ("I use AI for the following use cases...")</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-number">2</div>
+                    <div class="tip-text">If you already use an LLM and you have the conversation feature enabled, ask it to summarize how you use AI today</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-number">3</div>
+                    <div class="tip-text">Have a back-and-forth. Don't be satisfied with the first answer</div>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-number">4</div>
+                    <div class="tip-text">When you reply in the back-and-forth, be open-ended ("Here's what I think... What do you think?")</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-8">
+            <div class="s8-left">
+                <div class="s8-vertical-text">Principle 02</div>
+            </div>
+            <div class="s8-right">
+                <div class="s8-eyebrow">Multiply Your Talents</div>
+                <div class="s8-content-split">
+                    <div class="s8-text-col">
+                        <div class="s8-quote">
+                            “[T]he master replied, ‘You wicked and lazy servant! If you knew I harvested crops I didn’t plant and gathered crops I didn’t cultivate, why didn’t you deposit my money in the bank? At least I could have gotten some interest on it.’”
+                        </div>
+                        <div class="s8-citation">~ Matthew 25:27-27, NLT</div>
+                    </div>
+                    <div class="s8-img-col">
+                        <img src="william-tyndale.webp" alt="William Tyndale Statue" class="s8-img">
+                        <div class="s8-caption">Statue of William Tyndale in Westminster, London</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-9">
+            <div class="s9-eyebrow">Ground Rule 01</div>
+            <h2 class="s9-title">Think Early Majority</h2>
+            
+            <div class="s9-chart-container">
+                <svg viewBox="0 0 1000 450" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,400 Q100,400 150,380 L150,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M0,400 Q100,400 150,380" fill="none" stroke="var(--color-dark)" stroke-width="2" />
+                    <path d="M150,380 Q250,340 320,220 L320,400 L150,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M150,380 Q250,340 320,220" fill="none" stroke="var(--color-dark)" stroke-width="2" />
+                    <path d="M320,220 Q380,100 500,50 L500,400 L320,400 Z" fill="var(--color-peach)" />
+                    <path d="M320,220 Q380,100 500,50" fill="none" stroke="var(--color-dark)" stroke-width="4" />
+                    <path d="M500,50 Q620,100 680,220 L680,400 L500,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M500,50 Q620,100 680,220" fill="none" stroke="var(--color-dark)" stroke-width="2" />
+                    <path d="M680,220 Q750,340 850,380 T1000,400 L1000,400 L680,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M680,220 Q750,340 850,380 T1000,400" fill="none" stroke="var(--color-dark)" stroke-width="2" />
+                    <line x1="0" y1="400" x2="1000" y2="400" stroke="var(--color-dark)" stroke-width="2" />
+                    <line x1="150" y1="380" x2="150" y2="410" stroke="var(--color-dark)" stroke-width="1" stroke-dasharray="4" />
+                    <line x1="320" y1="220" x2="320" y2="410" stroke="var(--color-dark)" stroke-width="1" stroke-dasharray="4" />
+                    <line x1="500" y1="50" x2="500" y2="410" stroke="var(--color-dark)" stroke-width="1" stroke-dasharray="4" />
+                    <line x1="680" y1="220" x2="680" y2="410" stroke="var(--color-dark)" stroke-width="1" stroke-dasharray="4" />
+                    <text x="75" y="430" class="chart-label">Innovators</text>
+                    <text x="235" y="430" class="chart-label">Early Adopters</text>
+                    <text x="410" y="430" class="chart-label" style="fill: var(--color-dark); font-weight: 900;">Early Majority</text>
+                    <text x="590" y="430" class="chart-label">Late Majority</text>
+                    <text x="840" y="430" class="chart-label">Laggards</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="slide slide-10">
+            <div class="s9-eyebrow">Ground Rule 01</div>
+            <h2 class="s9-title">Think Early Majority</h2>
+            <div class="s9-chart-container">
+                <svg viewBox="0 0 1000 450" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0,400 Q100,400 150,380 L150,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M0,400 Q100,400 150,380" fill="none" stroke="var(--color-dark)" stroke-width="2" opacity="0.3"/>
+                    <path d="M150,380 Q250,340 320,220 L320,400 L150,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M150,380 Q250,340 320,220" fill="none" stroke="var(--color-dark)" stroke-width="2" opacity="0.3"/>
+                    <path d="M320,220 Q380,100 500,50 L500,400 L320,400 Z" fill="var(--color-peach)" />
+                    <path d="M320,220 Q380,100 500,50" fill="none" stroke="var(--color-dark)" stroke-width="4" opacity="0.3"/>
+                    <path d="M500,50 Q620,100 680,220 L680,400 L500,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M500,50 Q620,100 680,220" fill="none" stroke="var(--color-dark)" stroke-width="2" opacity="0.3"/>
+                    <path d="M680,220 Q750,340 850,380 T1000,400 L1000,400 L680,400 Z" fill="var(--color-grey-darker)" />
+                    <path d="M680,220 Q750,340 850,380 T1000,400" fill="none" stroke="var(--color-dark)" stroke-width="2" opacity="0.3"/>
+                    <line x1="0" y1="400" x2="1000" y2="400" stroke="var(--color-dark)" stroke-width="2" opacity="0.3"/>
+                    <text x="75" y="430" class="chart-label" opacity="0.3">Innovators</text>
+                    <text x="235" y="430" class="chart-label" opacity="0.3">Early Adopters</text>
+                    <text x="410" y="430" class="chart-label" style="fill: var(--color-dark); font-weight: 900;" opacity="0.5">Early Majority</text>
+                    <text x="590" y="430" class="chart-label" opacity="0.3">Late Majority</text>
+                    <text x="840" y="430" class="chart-label" opacity="0.3">Laggards</text>
+                    <path d="M0,400 C50,400 150,20 200,20 S 350,350 400,350 S 550,150 700,150 L 1000,150" class="hype-path" />
+                    <text x="200" y="50" class="hype-label">Peak of Inflated Expectations</text>
+                    <text x="400" y="380" class="hype-label">Trough of Disillusionment</text>
+                    <text x="750" y="130" class="hype-label">Slope of Enlightenment</text>
+                    <text x="900" y="180" class="hype-label">Plateau of Productivity</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="slide slide-11">
+            <div class="s11-half s11-mint">
+                <div class="s11-eyebrow">Ground Rule 02</div>
+                <div class="s11-title">Practice Makes<br>Progress</div>
+                <span class="iconify s11-icon-bg" data-icon="ph:arrows-clockwise-bold"></span>
+            </div>
+            <div class="s11-half s11-dark">
+                <div class="s11-eyebrow">Ground Rule 03</div>
+                <div class="s11-title">Be ready to surf at new breaks and wipeout</div>
+                <span class="iconify s11-icon-bg" data-icon="ph:waves-bold"></span>
+            </div>
+        </div>
+
+        <div class="slide slide-12">
+            <div class="s12-icon-row">
+                <span class="iconify" data-icon="ph:keyboard-fill"></span>
+                <span class="iconify s12-arrow" data-icon="ph:arrow-right-bold"></span>
+                <span class="iconify" data-icon="ph:sparkle-fill"></span>
+            </div>
+            <h2 class="s12-title">Prompt<br>Engineering</h2>
+            <div class="s12-subtitle">Getting the best output using the least input</div>
+        </div>
+
+        <div class="slide slide-13">
+            <div class="s13-icon-row">
+                <span class="iconify" data-icon="ph:file-text-fill"></span>
+                <span class="iconify s13-arrow" data-icon="ph:arrow-right-bold"></span>
+                <span class="iconify" data-icon="ph:list-numbers-bold"></span>
+            </div>
+            <h2 class="s13-title">Context<br>Engineering</h2>
+            
+            <div class="s13-content-box">
+                <div class="s13-item">1. Supplying all the relevant information for your prompt</div>
+                <div class="s13-item">2. Ensuring that the information is prioritized in the right order</div>
+            </div>
+        </div>
+
+        <div class="slide slide-14">
+            <div class="s14-header">
+                <div class="s14-eyebrow">Prompt Engineering Skill 01</div>
+                <h2 class="s14-title">The Secret Language of Prompting</h2>
+            </div>
+
+            <div class="s14-container">
+                
+                <div class="s14-card card-raw">
+                    <div class="code-header">
+                        <div class="window-dot dot-red"></div>
+                        <div class="window-dot dot-yellow"></div>
+                        <div class="window-dot dot-green"></div>
+                        <span style="margin-left: 10px;">editor.md</span>
+                    </div>
+                    <div class="code-content">
+                        <span class="md-heading"># The Future of AI</span><br><br>
+                        <span class="md-heading">## Why it matters</span><br><br>
+                        <span class="md-bold">**Artificial Intelligence**</span> is changing how we work.<br><br>
+                        <span class="md-list">- Automation</span><br>
+                        <span class="md-list">- Creativity</span><br>
+                        <span class="md-list">- Efficiency</span>
+                    </div>
+                </div>
+
+                <span class="iconify s14-arrow" data-icon="ph:arrow-right-bold"></span>
+
+                <div class="s14-card card-rendered">
+                    <div class="browser-header">
+                        <div class="browser-bar"></div>
+                    </div>
+                    <div class="render-content">
+                        <div class="render-h1">The Future of AI</div>
+                        <div class="render-h2">Why it matters</div>
+                        <div class="render-p">
+                            <span class="render-bold">Artificial Intelligence</span> is changing how we work.
+                        </div>
+                        <ul class="render-list">
+                            <li class="render-li">Automation</li>
+                            <li class="render-li">Creativity</li>
+                            <li class="render-li">Efficiency</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-15">
+            <div class="s15-header-section">
+                <h2 class="s15-title">Markdown Exercise</h2>
+                <div class="s15-timer">
+                    <span class="iconify" data-icon="ph:timer-fill"></span>
+                    5 Minutes
+                </div>
+            </div>
+
+            <div class="s15-content-wrapper">
+                
+                <div class="s15-card s15-problem">
+                    <div class="s15-label">Base Text</div>
+                    <div class="s15-raw-text">
+                        prompt instructions act as a professional nutritionist task create a 3-day meal plan goals high protein low carb no nuts ingredients to include chicken broccoli eggs spinach instructions provide a shopping list first then the meal plan breakdown for breakfast lunch and dinner finally include a section on storage tips important notes make sure all meals take less than 30 minutes to cook
+                    </div>
+                </div>
+
+                <div class="s15-card s15-instructions">
+                    <div class="s15-label" style="color: var(--color-mint);">Instructions</div>
+                    <ul class="s15-list">
+                        <li>Use <span class="code-tag">#</span> or <span class="code-tag">##</span> for section headers.</li>
+                        <li>Use <span class="code-tag">**bold**</span> for specific constraints or "must-haves."</li>
+                        <li>Use <span class="code-tag">-</span> or <span class="code-tag">*</span> for the list of ingredients.</li>
+                        <li>Use <span class="code-tag">1.</span>, <span class="code-tag">2.</span> for the sequence of instructions.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide slide-16">
+            <div class="s16-header">
+                <div class="s14-eyebrow">Prompt Engineering Skill 02</div>
+                <h2 class="s16-title">The Secret Integration to All LLMs</h2>
+            </div>
+
+            <div class="s16-container">
+                
+                <div class="s16-card card-chat">
+                    <div class="chat-header">
+                        <span>New Chat</span>
+                        <span class="iconify" data-icon="ph:dots-three-bold"></span>
+                    </div>
+                    <div class="chat-body">
+                        <div class="chat-bubble">
+                            Make me anything
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        Type a message...
+                    </div>
+                </div>
+
+                <span class="iconify s14-arrow" data-icon="ph:arrow-right-bold"></span>
+
+                <div class="s16-card card-app">
+                    <div class="app-toolbar">
+                        <div class="app-dot" style="background-color: #ff5f56;"></div>
+                        <div class="app-dot" style="background-color: #ffbd2e;"></div>
+                        <div class="app-dot" style="background-color: #27c93f;"></div>
+                    </div>
+                    <div class="app-viewport">
+                        <div class="app-widget w-full">
+                            <div class="mock-h1"></div>
+                            <div class="mock-circle"></div>
+                        </div>
+                        <div class="app-widget">
+                            <div class="mock-bar" style="width: 60%"></div>
+                            <div class="mock-bar" style="width: 90%"></div>
+                            <div class="mock-bar" style="width: 40%"></div>
+                        </div>
+                        <div class="app-widget">
+                            <div class="mock-bar" style="width: 30%"></div>
+                            <div class="mock-graph"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide slide-17">
+            <div class="s17-header-row">
+                <h2 class="s17-title-compact">Individual Exercise</h2>
+                <div class="s17-timer-compact">
+                    <span class="iconify" data-icon="ph:timer-fill"></span>
+                    5 Min
+                </div>
+            </div>
+
+            <div class="s17-grid">
+                
+                <div class="s17-col">
+                    <div class="s17-card">
+                        <div class="s17-step-header">
+                            <div class="s17-step-num">1</div>
+                            <div class="s17-step-title">Brainstorm a Tool</div>
+                        </div>
+                        <div class="s17-text">
+                            Think of a tool that does <strong>one thing</strong> well.
+                            <ul class="s17-list">
+                                <li>Translate a text from English to Korean</li>
+                                <li>Create a memory game for a Bible verse</li>
+                                <li>A simple budget calculator</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="s17-card card-fill">
+                        <div class="s17-step-header">
+                            <div class="s17-step-num">2</div>
+                            <div class="s17-step-title">The Prompt</div>
+                        </div>
+                        <div class="s17-text">
+                            Ask AI to make it, then <strong>copy/paste this exactly</strong> at the end of your prompt:
+                        </div>
+                        <div class="s17-snippet-box">
+                            <span class="s17-snippet-line">Please create me static webpage</span>
+                            <span class="s17-snippet-line">For icons, use icons from iconify.design</span>
+                            <span class="s17-snippet-line">Put CSS in style tag, JS in script tag (single file)</span>
+                            <span class="s17-snippet-line">Give me the result in a code block</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="s17-col">
+                    <div class="s17-card card-fill">
+                        <div class="s17-step-header">
+                            <div class="s17-step-title">The Workflow</div>
+                        </div>
+                        
+                        <div class="s17-process-container">
+                            <div class="s17-process-item">
+                                <div class="s17-p-num">3</div>
+                                <div class="s17-text">Copy the output code into <strong>Notepad</strong> (Windows) or <strong>TextEdit</strong> (Mac).</div>
+                            </div>
+
+                            <div class="s17-process-item">
+                                <div class="s17-p-num">4</div>
+                                <div class="s17-text">Save the file as a <strong>.html</strong> file (e.g., <em>game.html</em>).</div>
+                            </div>
+
+                            <div class="s17-process-item">
+                                <div class="s17-p-num">5</div>
+                                <div class="s17-text">Open the file with your web browser.</div>
+                            </div>
+
+                            <div class="s17-process-item">
+                                <div class="s17-p-num">6</div>
+                                <div class="s17-text"><strong>Iterate:</strong> If it doesn't work, tell the LLM what's wrong and repeat steps 3-5.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide slide-18">
+            <div class="s18-header">
+                <div class="s18-eyebrow">Context Engineering Skill 01</div>
+                <h2 class="s18-title">The Socratic Method?</h2>
+            </div>
+
+            <div class="s18-container">
+                
+                <div class="s18-row row-left">
+                    <div class="s18-card card-mint">
+                        <div class="s18-num">1</div>
+                        <div>Assert a thesis</div>
+                    </div>
+                </div>
+
+                <div class="s18-row row-right">
+                    <div class="s18-card card-peach">
+                        <div class="s18-num">2</div>
+                        <div>Find counter arguments or complete refutations</div>
+                    </div>
+                </div>
+
+                <div class="s18-row row-right">
+                    <div class="s18-card card-peach" style="transform: translateX(-20px);"> <div class="s18-num">3</div>
+                        <div>Start to believe in the counter arguments <strong>strongly</strong></div>
+                    </div>
+                </div>
+
+                <div class="s18-row row-left">
+                    <div class="s18-card card-mint">
+                        <div class="s18-num">4</div>
+                        <div>Find counter arguments to <em>those</em> counter arguments</div>
+                    </div>
+                </div>
+
+                <div class="s18-row row-left">
+                    <div class="s18-card card-mint" style="transform: translateX(20px);">
+                        <div class="s18-num">5</div>
+                        <div>Start to believe <strong>those</strong> now</div>
+                    </div>
+                </div>
+
+                <div class="s18-conclusion-box">
+                    <div class="s18-conc-label">Conclusion</div>
+                    <div class="s18-conc-text">You now believe that your thesis is both true and false</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="slide slide-19">
+            <div class="s17-header-row">
+                <h2 class="s17-title-compact">Individual Exercise</h2>
+                <div class="s17-timer-compact">
+                    <span class="iconify" data-icon="ph:timer-fill"></span>
+                    5 Min
+                </div>
+            </div>
+
+            <div class="s19-card">
+                <div class="s19-intro">
+                    Think of a <strong>high-level problem</strong> that you're dealing with right now.
+                </div>
+                
+                <div class="s19-steps">
+                    <div class="s19-step-item">
+                        <div class="s19-num">1</div>
+                        <div class="s19-text">Identify what you currently think is the <strong>best way</strong> to deal with the problem.</div>
+                    </div>
+
+                    <div class="s19-step-item">
+                        <div class="s19-num">2</div>
+                        <div class="s19-text">Ask AI to create a <span class="highlight-red">steelman argument</span> as to why that's a <strong>horrible idea</strong>.</div>
+                    </div>
+
+                    <div class="s19-step-item">
+                        <div class="s19-num">3</div>
+                        <div class="s19-text">Then, ask AI to completely <span class="highlight-mint">dissect and refute</span> the argument that it just made.</div>
+                    </div>
+
+                    <div class="s19-step-item">
+                        <div class="s19-num">4</div>
+                        <div class="s19-text">Reflect on the <strong>tradeoffs</strong> that are part of the problem space.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide slide-20">
+            <div class="s20-eyebrow">Context Engineering Skill 02</div>
+            <h2 class="s20-title">Use Different<br>Models</h2>
+            
+            <div class="s20-icons-container">
+                <div class="s20-icon-wrapper">
+                    <span class="iconify s20-icon" data-icon="ph:robot-fill"></span>
+                    <span class="s20-label">LOGIC</span>
+                </div>
+                <div class="s20-icon-wrapper">
+                    <span class="iconify s20-icon" data-icon="ph:brain-fill"></span>
+                    <span class="s20-label">CREATIVE</span>
+                </div>
+                <div class="s20-icon-wrapper">
+                    <span class="iconify s20-icon" data-icon="ph:lightning-fill"></span>
+                    <span class="s20-label">SPEED</span>
+                </div>
+                <div class="s20-icon-wrapper">
+                    <span class="iconify s20-icon" data-icon="ph:code-bold"></span>
+                    <span class="s20-label">CODE</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlideIndex = 0;
+
+        // Navigation
+        function showSlide(index) {
+            if (index < 0) index = 0;
+            if (index >= slides.length) index = slides.length - 1;
+            
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+            
+            currentSlideIndex = index;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') showSlide(currentSlideIndex + 1);
+            else if (e.key === 'ArrowLeft') showSlide(currentSlideIndex - 1);
+        });
+        
+        // Click to advance
+        document.addEventListener('click', () => showSlide(currentSlideIndex + 1));
+
+        // Auto-hide Mouse
+        let idleTimer;
+        const body = document.body;
+        function resetTimer() {
+            body.classList.remove('hidden-cursor');
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => body.classList.add('hidden-cursor'), 2000);
+        }
+        document.addEventListener('mousemove', resetTimer);
+        document.addEventListener('keydown', resetTimer);
+        resetTimer();
+    </script>
+</body>
+</html>
