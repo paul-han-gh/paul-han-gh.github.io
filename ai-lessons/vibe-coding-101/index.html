@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude & Hugging Face — Session 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+  <style>
+    /* ─── Design Tokens ─── */
+    :root {
+      --bg:         #f7f7f5;
+      --surface:    #ffffff;
+      --border:     rgba(0,0,0,0.07);
+      --border-mid: rgba(0,0,0,0.12);
+      --text:       #111110;
+      --muted:      #6b6b65;
+      --accent:     #e85d00;
+      --accent-dim: rgba(232,93,0,0.08);
+      --accent-mid: rgba(232,93,0,0.18);
+      --mono:       'DM Mono', monospace;
+      --sans:       'Outfit', system-ui, sans-serif;
+      --radius-sm:  12px;
+      --radius:     20px;
+      --radius-lg:  28px;
+      --shadow:     0 20px 60px -20px rgba(0,0,0,0.08), 0 1px 0 rgba(0,0,0,0.04);
+      --shadow-lg:  0 32px 80px -20px rgba(0,0,0,0.12), 0 1px 0 rgba(0,0,0,0.04);
+    }
+
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-mid);
+      border-radius: 100px;
+      padding: 8px 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    .nav-logo {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      padding: 0 8px;
+      color: var(--text);
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 16px;
+      background: var(--border-mid);
+    }
+
+    nav a {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 5px 12px;
+      border-radius: 100px;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    nav a:hover {
+      color: var(--text);
+      background: var(--border);
+    }
+
+    .nav-cta {
+      background: var(--text) !important;
+      color: var(--bg) !important;
+      font-size: 12.5px !important;
+      font-weight: 600 !important;
+    }
+
+    .nav-cta:hover {
+      background: #333 !important;
+    }
+
+    /* ─── Layout ─── */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    section {
+      padding: 80px 0;
+    }
+
+    /* ─── Hero ─── */
+    .hero {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 0;
+      padding-top: 0;
+    }
+
+    .hero-left {
+      padding: 120px 64px 80px 32px;
+      max-width: 640px;
+      margin-left: auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      padding: 6px 12px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-size: clamp(48px, 5.5vw, 72px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 24px;
+    }
+
+    .hero-title .accent-word {
+      color: var(--accent);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 52ch;
+      margin-bottom: 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--text);
+      color: var(--bg);
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 13px 24px;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 13px 24px;
+      border-radius: 100px;
+      border: 1px solid var(--border-mid);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--text);
+      background: rgba(0,0,0,0.03);
+    }
+
+    /* Hero right — bento preview */
+    .hero-right {
+      height: 100dvh;
+      background: var(--text);
+      padding: 100px 40px 80px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(232,93,0,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .module-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: default;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: translateX(0);
+      opacity: 0;
+      animation: slideInRight 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .module-card:nth-child(1) { animation-delay: 0.1s; }
+    .module-card:nth-child(2) { animation-delay: 0.22s; }
+    .module-card:nth-child(3) { animation-delay: 0.34s; }
+    .module-card:nth-child(4) { animation-delay: 0.46s; }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    .module-card:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.2);
+      transform: translateX(-6px);
+    }
+
+    .module-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent);
+      font-size: 20px;
+    }
+
+    .module-info {}
+    .module-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .module-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: -0.01em;
+    }
+
+    .hero-session-tag {
+      position: absolute;
+      bottom: 32px;
+      left: 56px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      letter-spacing: 0.06em;
+    }
+
+    /* ─── Section Headers ─── */
+    .section-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .section-title {
+      font-size: clamp(32px, 3.5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 16px;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 56ch;
+      line-height: 1.65;
+    }
+
+    /* ─── Module 01: HF Spaces ─── */
+    #hf-spaces {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 56px;
+    }
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .step-item {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .step-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .step-num {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-content {}
+    .step-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .step-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .hf-visual {
+      position: sticky;
+      top: 120px;
+    }
+
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-dark {
+      background: var(--text);
+      border-color: transparent;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .connector-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .connector-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .connector-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+      50% { box-shadow: 0 0 0 6px rgba(34,197,94,0.1); }
+    }
+
+    .connector-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .connector-row:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.15);
+      transform: translateX(4px);
+    }
+
+    .connector-icon {
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .connector-row-text { flex: 1; }
+    .connector-row-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+    .connector-row-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
+      font-family: var(--mono);
+    }
+
+    .connector-badge {
+      font-size: 10px;
+      font-weight: 600;
+      font-family: var(--mono);
+      letter-spacing: 0.06em;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border: 1px solid var(--accent-mid);
+      padding: 3px 8px;
+      border-radius: 100px;
+    }
+
+    /* ─── Module 02: Single Page Sites ─── */
+    #single-page {
+      padding-bottom: 100px;
+    }
+
+    .spa-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: end;
+      margin-bottom: 56px;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 56px;
+    }
+
+    .tech-card {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+
+    .tech-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tech-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--border-mid);
+    }
+
+    .tech-card-wide {
+      grid-column: span 3;
+      background: linear-gradient(135deg, #111110 0%, #1a1a18 100%);
+      color: rgba(255,255,255,0.9);
+    }
+
+    .tech-card-wide:hover {
+      transform: translateY(-4px);
+    }
+
+    .tech-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+
+    .tech-card-wide .tech-icon {
+      background: rgba(232,93,0,0.15);
+    }
+
+    .tech-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    .tech-card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .tech-card-wide .tech-card-desc {
+      color: rgba(255,255,255,0.45);
+    }
+
+    .prompt-block {
+      margin-top: 28px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 20px 24px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .prompt-block .k { color: #e85d00; font-weight: 500; }
+    .prompt-block .s { color: rgba(255,255,255,0.9); }
+
+    /* ─── Module 03: Claude Code ─── */
+    #claude-code {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cc-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 56px;
+    }
+
+    .cc-features {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .cc-feat {
+      display: flex;
+      gap: 20px;
+      padding: 20px 16px;
+      border-radius: var(--radius-sm);
+      transition: background 0.2s;
+      cursor: default;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.4s, transform 0.4s cubic-bezier(0.34,1.56,0.64,1), background 0.2s;
+    }
+
+    .cc-feat.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .cc-feat:hover {
+      background: var(--bg);
+    }
+
+    .cc-feat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .cc-feat-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .cc-feat-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .terminal-card {
+      background: #0d0d0c;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 120px;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .t-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .t-red { background: #ff5f57; }
+    .t-yellow { background: #ffbd2e; }
+    .t-green { background: #28ca41; }
+
+    .terminal-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      margin-left: auto;
+      margin-right: auto;
+      letter-spacing: 0.04em;
+    }
+
+    .terminal-body {
+      padding: 24px;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .t-prompt {
+      color: var(--accent);
+    }
+
+    .t-cmd {
+      color: rgba(255,255,255,0.85);
+    }
+
+    .t-out {
+      color: rgba(255,255,255,0.4);
+    }
+
+    .t-success {
+      color: #22c55e;
+    }
+
+    .t-cursor {
+      display: inline-block;
+      width: 7px;
+      height: 14px;
+      background: var(--accent);
+      vertical-align: middle;
+      animation: blink 1.1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ─── Module 04: Taste-Skill ─── */
+    #taste-skill {
+      padding-bottom: 120px;
+    }
+
+    .ts-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: end;
+      margin-bottom: 56px;
+    }
+
+    .dial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .dial-card {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .dial-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .dial-value {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .dial-value span {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .dial-bar {
+      height: 4px;
+      background: var(--border-mid);
+      border-radius: 100px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+
+    .dial-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 100px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s;
+    }
+
+    .dial-card.visible .dial-fill {
+      transform: scaleX(1);
+    }
+
+    .ts-rule-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .ts-rule {
+      background: var(--surface);
+      border: 1px solid var(--border-mid);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      gap: 16px;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .ts-rule.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .ts-rule-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .ts-rule-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 5px;
+    }
+
+    .ts-rule-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.9);
+      padding: 56px 0;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .footer-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.35);
+      margin-top: 4px;
+      font-family: var(--mono);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ─── Scroll reveal base ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── Tag chip ─── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      font-weight: 500;
+      font-family: var(--mono);
+      letter-spacing: 0.02em;
+      background: var(--bg);
+      border: 1px solid var(--border-mid);
+      padding: 4px 10px;
+      border-radius: 100px;
+      color: var(--muted);
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 140px 32px 80px; max-width: none; margin: 0; }
+      .hf-grid, .cc-layout, .spa-header, .ts-header { grid-template-columns: 1fr; gap: 40px; }
+      .tech-grid { grid-template-columns: 1fr; }
+      .tech-card-wide { grid-column: span 1; }
+      .dial-grid { grid-template-columns: 1fr; }
+      .ts-rule-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+      nav a:not(.nav-cta) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Navigation ─── -->
+  <nav>
+    <span class="nav-logo">Claude + HF</span>
+    <div class="nav-divider"></div>
+    <a href="#hf-spaces">HF Spaces</a>
+    <a href="#single-page">Single Page</a>
+    <a href="#claude-code">Claude Code</a>
+    <a href="#taste-skill">Taste-Skill</a>
+    <a href="https://claude.ai" target="_blank" class="nav-cta">Open Claude</a>
+  </nav>
+
+  <!-- ─── Hero ─── -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <iconify-icon icon="ph:graduation-cap-bold"></iconify-icon>
+        Session 01 · March 2026
+      </div>
+
+      <h1 class="hero-title">
+        Build beautiful<br />
+        sites with<br />
+        <span class="accent-word">Claude AI</span>
+      </h1>
+
+      <p class="hero-sub">
+        Learn to connect Hugging Face Spaces, design single-page websites
+        with pure HTML, and generate premium interfaces using the
+        Taste-Skill design system.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#hf-spaces" class="btn-primary">
+          <iconify-icon icon="ph:play-circle-bold"></iconify-icon>
+          Start Learning
+        </a>
+        <a href="https://github.com/Leonxlnx/taste-skill" target="_blank" class="btn-ghost">
+          <iconify-icon icon="ph:github-logo-bold"></iconify-icon>
+          Taste-Skill Repo
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:28px;">
+        What you'll learn
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">
+          <iconify-icon icon="ph:plug-bold"></iconify-icon>
+        </div>
+        <div class="module-info">
+          <div class="module-num">Module 01</div>
+          <div class="module-name">Hugging Face Spaces Connector</div>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">
+          <iconify-icon icon="ph:file-html-bold"></iconify-icon>
+        </div>
+        <div class="module-info">
+          <div class="module-num">Module 02</div>
+          <div class="module-name">Creating Single Page Websites</div>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">
+          <iconify-icon icon="ph:terminal-window-bold"></iconify-icon>
+        </div>
+        <div class="module-info">
+          <div class="module-num">Module 03</div>
+          <div class="module-name">Using Claude Code</div>
+        </div>
+      </div>
+
+      <div class="module-card">
+        <div class="module-icon">
+          <iconify-icon icon="ph:paint-brush-broad-bold"></iconify-icon>
+        </div>
+        <div class="module-info">
+          <div class="module-num">Module 04</div>
+          <div class="module-name">Generating with Taste-Skill</div>
+        </div>
+      </div>
+
+      <div class="hero-session-tag">session-01.claude.taste-skill</div>
+    </div>
+  </section>
+
+  <!-- ─── Module 01: HF Spaces ─── -->
+  <section id="hf-spaces">
+    <div class="container">
+      <div class="section-eyebrow">Module 01</div>
+      <div class="hf-grid">
+        <div>
+          <h2 class="section-title">Hugging Face<br />Spaces Connector</h2>
+          <p class="section-sub">
+            Connect Claude to over 500,000 AI models and Spaces on Hugging Face —
+            directly from your Claude.ai chat window, no code required.
+          </p>
+
+          <div style="display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-mid);padding:5px 12px;border-radius:100px;margin-top:24px;margin-bottom:32px;">
+            <iconify-icon icon="ph:info-bold"></iconify-icon>
+            Requires a paid Claude account
+          </div>
+
+          <div class="step-list">
+            <div class="step-item">
+              <div class="step-num">01</div>
+              <div class="step-content">
+                <div class="step-title">Open Search &amp; Tools</div>
+                <div class="step-desc">In any Claude chat, click <strong>Search and tools</strong> in the chat input box to open the connectors panel.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">02</div>
+              <div class="step-content">
+                <div class="step-title">Add a Custom Connector</div>
+                <div class="step-desc">Select <strong>Add custom connector</strong>. HF is no longer in the built-in directory — you must enter the URL manually.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">03</div>
+              <div class="step-content">
+                <div class="step-title">Enter the Remote MCP URL</div>
+                <div class="step-desc">Set the Remote MCP server URL to <code style="font-family:var(--mono);font-size:12.5px;background:var(--bg);padding:2px 7px;border-radius:6px;border:1px solid var(--border-mid);">https://huggingface.co/mcp?login</code> — this authenticates you via your HF account.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">04</div>
+              <div class="step-content">
+                <div class="step-title">Add Image Generation Tools</div>
+                <div class="step-desc">Go to <strong>huggingface.co/settings/mcp</strong> and add Spaces tools such as <em>mcp-tools/FLUX.1-Krea-dev</em> for photorealistic images or <em>mcp-tools/qwen-image</em> for text-accurate images.</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">05</div>
+              <div class="step-content">
+                <div class="step-title">Generate Images in Claude</div>
+                <div class="step-desc">Ask Claude: <em>"Use Krea to create an image of a vibrant garden with a Victorian house."</em> Claude calls the HF Space and returns the generated image inline.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual -->
+        <div class="hf-visual">
+          <div class="card card-dark">
+            <div class="connector-header">
+              <span class="connector-title">Active Connectors</span>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div class="status-dot"></div>
+                <span style="font-size:12px;color:rgba(255,255,255,0.45);font-family:var(--mono);">3 active</span>
+              </div>
+            </div>
+            <div class="connector-demo">
+              <div class="connector-row">
+                <div class="connector-icon">
+                  <iconify-icon icon="simple-icons:huggingface" style="color:#FFD21E"></iconify-icon>
+                </div>
+                <div class="connector-row-text">
+                  <div class="connector-row-name">Hugging Face Spaces</div>
+                  <div class="connector-row-sub">mcp.huggingface.co · 12 tools</div>
+                </div>
+                <div class="connector-badge">Active</div>
+              </div>
+
+              <div class="connector-row">
+                <div class="connector-icon">
+                  <iconify-icon icon="ph:image-square-bold" style="color:#a78bfa"></iconify-icon>
+                </div>
+                <div class="connector-row-text">
+                  <div class="connector-row-name">FLUX.1 Krea</div>
+                  <div class="connector-row-sub">mcp-tools/FLUX.1-Krea-dev</div>
+                </div>
+                <div class="connector-badge">Active</div>
+              </div>
+
+              <div class="connector-row">
+                <div class="connector-icon">
+                  <iconify-icon icon="ph:text-t-bold" style="color:#60a5fa"></iconify-icon>
+                </div>
+                <div class="connector-row-text">
+                  <div class="connector-row-name">Qwen Image</div>
+                  <div class="connector-row-sub">mcp-tools/qwen-image</div>
+                </div>
+                <div class="connector-badge">Active</div>
+              </div>
+            </div>
+
+            <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.07);">
+              <div style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.25);margin-bottom:12px;letter-spacing:0.06em;text-transform:uppercase;">Example prompt</div>
+              <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px;font-size:13.5px;color:rgba(255,255,255,0.7);line-height:1.6;font-style:italic;">
+                "Use Krea to create an image of a vibrant garden with a Victorian house."
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Module 02: Single Page Sites ─── -->
+  <section id="single-page">
+    <div class="container">
+      <div class="spa-header">
+        <div>
+          <div class="section-eyebrow">Module 02</div>
+          <h2 class="section-title">Creating Single<br />Page Websites</h2>
+        </div>
+        <div>
+          <p class="section-sub">
+            Set up a Claude project with the right system prompt and you can generate
+            fully self-contained HTML files — with CSS, JavaScript, icons, and AI images
+            all in a single artifact.
+          </p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;">
+            <span class="chip"><iconify-icon icon="ph:file-html-bold"></iconify-icon> Single HTML file</span>
+            <span class="chip"><iconify-icon icon="ph:paint-bucket-bold"></iconify-icon> CSS in &lt;style&gt;</span>
+            <span class="chip"><iconify-icon icon="ph:code-bold"></iconify-icon> JS in &lt;script&gt;</span>
+            <span class="chip"><iconify-icon icon="ph:star-bold"></iconify-icon> Iconify icons</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-grid">
+        <div class="tech-card" style="transition-delay: 0s;">
+          <div class="tech-icon">
+            <iconify-icon icon="ph:files-bold"></iconify-icon>
+          </div>
+          <div class="tech-card-title">Self-contained HTML</div>
+          <div class="tech-card-desc">Everything lives in one file — no build step, no npm, no framework. Open it in any browser and it just works.</div>
+        </div>
+
+        <div class="tech-card" style="transition-delay: 0.1s;">
+          <div class="tech-icon">
+            <iconify-icon icon="ph:star-four-bold"></iconify-icon>
+          </div>
+          <div class="tech-card-title">Iconify Icons</div>
+          <div class="tech-card-desc">Add a CDN script tag for iconify-icon and use <code style="font-family:var(--mono);font-size:12px;background:var(--bg);padding:1px 5px;border-radius:4px;">&lt;iconify-icon icon="ph:…"&gt;</code> anywhere in your HTML.</div>
+        </div>
+
+        <div class="tech-card" style="transition-delay: 0.2s;">
+          <div class="tech-icon">
+            <iconify-icon icon="ph:image-bold"></iconify-icon>
+          </div>
+          <div class="tech-card-title">Z-Image Turbo</div>
+          <div class="tech-card-desc">Ask Claude to generate images via the HF Spaces connector. The tool returns a URL you can drop directly into your &lt;img&gt; tags.</div>
+        </div>
+
+        <!-- Wide card: the Claude project prompt -->
+        <div class="tech-card tech-card-wide" style="transition-delay: 0.3s;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;">
+            <div>
+              <div class="tech-icon">
+                <iconify-icon icon="ph:robot-bold"></iconify-icon>
+              </div>
+              <div class="tech-card-title" style="color:rgba(255,255,255,0.9);font-size:17px;">
+                Your Claude Project<br />System Prompt
+              </div>
+              <div class="tech-card-desc" style="margin-top:8px;">
+                Create a new Claude Project and paste this as the system prompt. Every conversation will produce a clean, self-contained HTML file ready to open in your browser.
+              </div>
+            </div>
+            <div>
+              <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.25);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;">System Prompt</div>
+              <div class="prompt-block">
+                <span class="k">You are a web designer.</span> <span class="s">When building websites, always output a single complete HTML file with all CSS inside a &lt;style&gt; tag in &lt;head&gt; and all JavaScript inside a &lt;script&gt; tag before &lt;/body&gt;.</span>
+                <br /><br />
+                <span class="k">For icons</span><span class="s">, use Iconify via CDN: &lt;script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"&gt;&lt;/script&gt; and reference icons as &lt;iconify-icon icon="ph:name-bold"&gt;&lt;/iconify-icon&gt;.</span>
+                <br /><br />
+                <span class="k">For images</span><span class="s">, use the Z-Image Turbo tool from the Hugging Face Spaces connector to generate real AI images, then place the returned URL in an &lt;img&gt; tag.</span>
+                <br /><br />
+                <span class="s">Never split your output across multiple files. The artifact must be complete and immediately openable in a browser.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Module 03: Claude Code ─── -->
+  <section id="claude-code">
+    <div class="container">
+      <div class="section-eyebrow">Module 03</div>
+      <div class="cc-layout">
+        <div>
+          <h2 class="section-title">Using<br />Claude Code</h2>
+          <p class="section-sub" style="margin-bottom:40px;">
+            Claude Code is a CLI tool that lets Claude read, write, and run code in your
+            actual project — no copy-pasting required. It can browse files, run commands,
+            and iterate directly on your codebase.
+          </p>
+
+          <div class="cc-features">
+            <div class="cc-feat">
+              <div class="cc-feat-icon">
+                <iconify-icon icon="ph:folder-open-bold"></iconify-icon>
+              </div>
+              <div>
+                <div class="cc-feat-title">Full File System Access</div>
+                <div class="cc-feat-desc">Claude can read any file in your project, create new files, and edit existing ones with surgical precision.</div>
+              </div>
+            </div>
+            <div class="cc-feat">
+              <div class="cc-feat-icon">
+                <iconify-icon icon="ph:terminal-bold"></iconify-icon>
+              </div>
+              <div>
+                <div class="cc-feat-title">Run Terminal Commands</div>
+                <div class="cc-feat-desc">Execute npm scripts, run tests, start servers, or any shell command — all from within the conversation.</div>
+              </div>
+            </div>
+            <div class="cc-feat">
+              <div class="cc-feat-icon">
+                <iconify-icon icon="ph:git-branch-bold"></iconify-icon>
+              </div>
+              <div>
+                <div class="cc-feat-title">Git-Aware</div>
+                <div class="cc-feat-desc">Claude understands your repo history, can create commits, and knows what has changed since the last commit.</div>
+              </div>
+            </div>
+            <div class="cc-feat">
+              <div class="cc-feat-icon">
+                <iconify-icon icon="ph:plugs-connected-bold"></iconify-icon>
+              </div>
+              <div>
+                <div class="cc-feat-title">MCP Tool Support</div>
+                <div class="cc-feat-desc">Connect MCP servers (like MotherDuck, Notion, or Hugging Face) for even deeper integrations right in your project.</div>
+              </div>
+            </div>
+            <div class="cc-feat">
+              <div class="cc-feat-icon">
+                <iconify-icon icon="ph:memory-bold"></iconify-icon>
+              </div>
+              <div>
+                <div class="cc-feat-title">Persistent Memory</div>
+                <div class="cc-feat-desc">Claude Code stores context in a CLAUDE.md file so it remembers your project conventions across sessions.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Terminal -->
+        <div>
+          <div class="terminal-card">
+            <div class="terminal-bar">
+              <div class="t-dot t-red"></div>
+              <div class="t-dot t-yellow"></div>
+              <div class="t-dot t-green"></div>
+              <div class="terminal-title">bash — claude-code</div>
+            </div>
+            <div class="terminal-body">
+              <div><span class="t-prompt">~</span> <span class="t-cmd">npm install -g @anthropic-ai/claude-code</span></div>
+              <div class="t-out">added 1 package in 2s</div>
+              <div style="height:12px;"></div>
+
+              <div><span class="t-prompt">~/my-project</span> <span class="t-cmd">claude</span></div>
+              <div class="t-success">✓ Claude Code initialized</div>
+              <div class="t-out">Reading CLAUDE.md… project context loaded</div>
+              <div style="height:12px;"></div>
+
+              <div><span class="t-prompt">claude&gt;</span> <span class="t-cmd">Create a landing page for my SaaS product with the taste-skill design system</span></div>
+              <div style="height:8px;"></div>
+              <div class="t-out">● Reading project files…</div>
+              <div class="t-out">● Fetching taste-skill guidelines…</div>
+              <div class="t-out">● Writing index.html…</div>
+              <div class="t-success">✓ Created index.html (382 lines)</div>
+              <div style="height:12px;"></div>
+
+              <div><span class="t-prompt">claude&gt;</span> <span class="t-cmd">open index.html in browser</span></div>
+              <div class="t-success">✓ Opened in Chrome</div>
+              <div style="height:8px;"></div>
+              <div><span class="t-prompt">claude&gt;</span> <span class="t-cursor"></span></div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;background:var(--bg);border:1px solid var(--border-mid);border-radius:var(--radius-sm);padding:20px 24px;">
+            <div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Quick start</div>
+            <div style="font-family:var(--mono);font-size:13px;line-height:2;">
+              <span style="color:var(--muted);"># Install globally</span><br />
+              <strong>npm install -g @anthropic-ai/claude-code</strong><br />
+              <span style="color:var(--muted);"># Run in any project folder</span><br />
+              <strong>claude</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Module 04: Taste-Skill ─── -->
+  <section id="taste-skill">
+    <div class="container">
+      <div class="ts-header">
+        <div>
+          <div class="section-eyebrow">Module 04</div>
+          <h2 class="section-title">Generate with<br />Taste-Skill</h2>
+        </div>
+        <div>
+          <p class="section-sub">
+            Taste-Skill is a design system for AI — a set of rules you give Claude
+            to produce premium, visually sophisticated interfaces instead of generic templates.
+            Three dials control the aesthetic output.
+          </p>
+        </div>
+      </div>
+
+      <!-- Dials -->
+      <div class="dial-grid" style="margin-bottom:40px;">
+        <div class="dial-card">
+          <div class="dial-label">Design Variance</div>
+          <div class="dial-value">8 <span>/ 10</span></div>
+          <div style="font-size:13px;color:var(--muted);">Asymmetric layouts, massive whitespace zones, masonry grids</div>
+          <div class="dial-bar"><div class="dial-fill" style="width:80%;"></div></div>
+        </div>
+        <div class="dial-card">
+          <div class="dial-label">Motion Intensity</div>
+          <div class="dial-value">6 <span>/ 10</span></div>
+          <div style="font-size:13px;color:var(--muted);">Fluid CSS transitions, scroll reveals, spring animations</div>
+          <div class="dial-bar"><div class="dial-fill" style="width:60%;"></div></div>
+        </div>
+        <div class="dial-card">
+          <div class="dial-label">Visual Density</div>
+          <div class="dial-value">4 <span>/ 10</span></div>
+          <div style="font-size:13px;color:var(--muted);">Standard app spacing, comfortable reading rhythm</div>
+          <div class="dial-bar"><div class="dial-fill" style="width:40%;"></div></div>
+        </div>
+      </div>
+
+      <!-- Rules -->
+      <div style="margin-bottom:24px;font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Key Design Rules</div>
+      <div class="ts-rule-grid">
+        <div class="ts-rule">
+          <div class="ts-rule-icon"><iconify-icon icon="ph:text-aa-bold"></iconify-icon></div>
+          <div>
+            <div class="ts-rule-title">Premium Typography</div>
+            <div class="ts-rule-desc">Use Geist, Outfit, Satoshi, or Cabinet Grotesk. Never Inter. Headlines at tracking-tighter with leading-none for impact.</div>
+          </div>
+        </div>
+        <div class="ts-rule">
+          <div class="ts-rule-icon"><iconify-icon icon="ph:palette-bold"></iconify-icon></div>
+          <div>
+            <div class="ts-rule-title">Single Accent Color</div>
+            <div class="ts-rule-desc">Maximum 1 accent with saturation &lt;80%. Absolute neutral base (Zinc/Slate). No neon glows or AI purple gradients.</div>
+          </div>
+        </div>
+        <div class="ts-rule">
+          <div class="ts-rule-icon"><iconify-icon icon="ph:layout-bold"></iconify-icon></div>
+          <div>
+            <div class="ts-rule-title">No Centered Heroes</div>
+            <div class="ts-rule-desc">Variance &gt;4 forces split-screen, left-aligned, or asymmetric layouts. Bento grids over 3-column equal-card layouts.</div>
+          </div>
+        </div>
+        <div class="ts-rule">
+          <div class="ts-rule-icon"><iconify-icon icon="ph:sparkle-bold"></iconify-icon></div>
+          <div>
+            <div class="ts-rule-title">Perpetual Micro-Motion</div>
+            <div class="ts-rule-desc">Pulse, typewriter, float, shimmer effects keep components alive. Spring physics (stiffness 100, damping 20) for interactions.</div>
+          </div>
+        </div>
+        <div class="ts-rule">
+          <div class="ts-rule-icon"><iconify-icon icon="ph:prohibit-bold"></iconify-icon></div>
+          <div>
+            <div class="ts-rule-title">No AI Clichés</div>
+            <div class="ts-rule-desc">Ban "Seamless", "Elevate", "Unleash" copy. No Unsplash photos. No John Doe / Sarah Chan. No 99.99% uptime metrics.</div>
+          </div>
+        </div>
+        <div class="ts-rule">
+          <div class="ts-rule-icon"><iconify-icon icon="ph:rocket-launch-bold"></iconify-icon></div>
+          <div>
+            <div class="ts-rule-title">How to Apply</div>
+            <div class="ts-rule-desc">Copy SKILL.md into your project, then ask Claude to follow it. Or reference it inline: "Follow the taste-skill design rules at [URL]."</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div style="margin-top:56px;background:var(--text);border-radius:var(--radius-lg);padding:48px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;">
+        <div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;">Try it now</div>
+          <div style="font-size:28px;font-weight:800;letter-spacing:-0.04em;color:rgba(255,255,255,0.9);line-height:1.1;margin-bottom:10px;">
+            Generate your first<br />premium site
+          </div>
+          <div style="font-size:14px;color:rgba(255,255,255,0.4);line-height:1.6;max-width:48ch;">
+            Open Claude, enable the Hugging Face Spaces connector, create a project with the HTML system prompt, and ask Claude to design your site following the taste-skill rules.
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;flex-shrink:0;">
+          <a href="https://claude.ai" target="_blank" class="btn-primary" style="background:var(--accent);">
+            <iconify-icon icon="ph:arrow-right-bold"></iconify-icon>
+            Open Claude
+          </a>
+          <a href="https://github.com/Leonxlnx/taste-skill" target="_blank" class="btn-ghost" style="border-color:rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);">
+            <iconify-icon icon="ph:github-logo-bold"></iconify-icon>
+            Taste-Skill Repo
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Footer ─── -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-logo">Claude + Hugging Face</div>
+          <div class="footer-sub">Session 01 · March 2026</div>
+        </div>
+        <div class="footer-links">
+          <a href="https://claude.ai" target="_blank">Claude</a>
+          <a href="https://huggingface.co" target="_blank">Hugging Face</a>
+          <a href="https://github.com/Leonxlnx/taste-skill" target="_blank">Taste-Skill</a>
+          <a href="https://iconify.design" target="_blank">Iconify</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─── Scroll Reveal (Intersection Observer) ───
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll(
+      '.step-item, .tech-card, .cc-feat, .ts-rule, .reveal'
+    ).forEach(el => observer.observe(el));
+
+    // ─── Dial bars — observe and trigger ───
+    const dialObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.dial-card').forEach(el => dialObserver.observe(el));
+
+    // ─── Step item stagger delays ───
+    document.querySelectorAll('.step-item').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 80}ms`;
+    });
+
+    document.querySelectorAll('.cc-feat').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 70}ms`;
+    });
+
+    document.querySelectorAll('.ts-rule').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 80}ms`;
+    });
+
+    // ─── Magnetic nav links ───
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('mousemove', (e) => {
+        const rect = link.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        link.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+      });
+      link.addEventListener('mouseleave', () => {
+        link.style.transform = '';
+        link.style.transition = 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1), color 0.2s, background 0.2s';
+        setTimeout(() => { link.style.transition = ''; }, 400);
+      });
+    });
+
+    // ─── Active nav highlight on scroll ───
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.style.color = '');
+          const activeLink = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+          if (activeLink) activeLink.style.color = 'var(--accent)';
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => sectionObserver.observe(s));
+
+    // ─── Hero text entrance ───
+    const heroEls = document.querySelectorAll('.hero-eyebrow, .hero-title, .hero-sub, .hero-actions');
+    heroEls.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = `opacity 0.7s ease, transform 0.7s cubic-bezier(0.34,1.56,0.64,1)`;
+      el.style.transitionDelay = `${0.1 + i * 0.12}s`;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
