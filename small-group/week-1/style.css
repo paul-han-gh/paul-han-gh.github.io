@@ -1,0 +1,28 @@
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #202b40;
+  background: #ffffff;
+  font-synthesis: none;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 38rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+header { margin-bottom: 2.5rem; }
+h1 { margin: 0; font-size: clamp(1.8rem, 7vw, 2.3rem); font-weight: 750; letter-spacing: -.035em; line-height: 1.2; }
+h2 { font-size: 1.2rem; line-height: 1.4; margin: 0 0 .8rem; overflow-wrap: anywhere; }
+section + section { margin-top: 2.5rem; }
+.reference { margin: 0 0 1rem; font-size: 1.1rem; }
+.reading-card { padding: 1.15rem; border: 1px solid #dce7ff; border-radius: 1rem; background: #f0f5ff; }
+label { display: block; margin-bottom: .4rem; font-size: .9rem; font-weight: 600; }
+select { display: block; width: 100%; min-height: 48px; padding: .65rem .75rem; border: 1px solid #8394b3; border-radius: .5rem; background: #fff; color: #202b40; font: inherit; }
+.read-link { display: block; margin-top: .8rem; min-height: 48px; padding: .8rem 1rem; border-radius: .5rem; background: #2563eb; color: #fff; text-align: center; text-decoration: none; font-weight: 600; overflow-wrap: anywhere; }
+.read-link:hover { background: #1d4ed8; text-decoration: underline; }
+:focus-visible { outline: 3px solid #7c3aed; outline-offset: 4px; }
+.help { margin: .8rem 0 0; font-size: .85rem; color: #526480; }
+.questions { list-style: none; margin: 0; padding: 0; }
+.questions li { display: flex; align-items: flex-start; gap: .9rem; padding: 1.3rem 0; border-top: 1px solid #e5ebf5; }
+.question-number { flex: 0 0 1.7rem; margin-top: .1rem; color: #526480; font-size: .85rem; }
+.questions p { margin: 0; font-size: 1.1rem; overflow-wrap: anywhere; }
+@media (min-width: 600px) { main { padding-top: 4rem; } }
